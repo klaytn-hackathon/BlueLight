@@ -6,7 +6,6 @@ import {
     EditorPage,
     NotFoundPage,
 } from 'pages';
-import Base from 'containers/common/Base';
 import Con from '../App'
 
 const App = () => {
@@ -21,7 +20,6 @@ const App = () => {
                 <Route path='/con' component={Con} />
                 <Route component={NotFoundPage} />
             </Switch>
-            <Base />
         </div>
     );
 }

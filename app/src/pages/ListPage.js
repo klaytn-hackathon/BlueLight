@@ -6,10 +6,12 @@ import ListWrapper from 'components/list/ListWrapper';
 import ListContainer from 'containers/list/ListContainer';
 import { Helmet } from 'react-helmet';
 
-import { DrizzleProvider } from "drizzle-react";
-import { LoadingContainer } from "drizzle-react-components";
-import store from '../middleware'
-import drizzleOptions from "../drizzleOptions";
+import DrizzleWrapper from 'components/DrizzleWrapper'
+
+// import { DrizzleProvider } from "drizzle-react";
+// import { LoadingContainer } from "drizzle-react-components";
+// import store from '../middleware'
+// import drizzleOptions from "../drizzleOptions";
 
 const ListPage = ({ match }) => {
     // page의 기본값을 1로 설정한다.
@@ -33,18 +35,12 @@ const ListPage = ({ match }) => {
                 <title>{title}</title>
             </Helmet>
             <ListWrapper>
-                <DrizzleProvider store={store} options={drizzleOptions}>
-                    <LoadingContainer>
-                        <ListContainer
-                            page={parseInt(page, 10)}
-                            tag={tag}
-                        />
-                    </LoadingContainer>
-                </DrizzleProvider>
-                {/* <ListContainer
-                page={parseInt(page, 10)}
-                    tag={tag}
-                /> */}
+                <DrizzleWrapper>
+                    <ListContainer
+                        page={parseInt(page, 10)}
+                        tag={tag}
+                    />
+                </DrizzleWrapper>
             </ListWrapper>
         </PageTemplate>
     )
