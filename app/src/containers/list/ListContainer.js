@@ -6,6 +6,8 @@ import { bindActionCreators } from 'redux';
 import * as listActions from 'store/modules/list';
 // import list from '../../store/modules/list';
 
+import { drizzleConnect } from 'drizzle-react'
+
 class ListContainer extends Component {
     getPostList = () => {
         // 페이지와 태그 값을 부모에게서 받아 온다.
@@ -14,6 +16,7 @@ class ListContainer extends Component {
     };
 
     componentDidMount() {
+        console.log('pbw ListContainer props?', this.props)
         this.getPostList();
     }
 
@@ -43,6 +46,20 @@ class ListContainer extends Component {
     }
 }
 
+const drizzleListContainer = drizzleConnect(
+    ListContainer,
+    (state) => {
+        console.log('pbw drizzle List', state)
+
+        return {
+            accounts: state.accounts,
+            SimpleStorage: state.contracts.SimpleStorage,
+            TutorialToken: state.contracts.TutorialToken,
+            drizzleStatus: state.drizzleStatus,
+        }
+    }
+)
+
 export default connect(
     (state) => ({
         posts: state.list.get('posts'),
@@ -52,4 +69,4 @@ export default connect(
     (dispatch) => ({
         ListActions: bindActionCreators(listActions, dispatch),
     })
-)(ListContainer);
+)(drizzleListContainer);
