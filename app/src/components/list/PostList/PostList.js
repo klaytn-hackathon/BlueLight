@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import removeMd from 'remove-markdown';
 
+import { Drizzle } from 'drizzle'
+
 import {
   AccountData,
   ContractData,
@@ -52,7 +54,9 @@ const PostList = ({ posts }) => {
     <div className={cx('post-list')}>
       <p>
         <strong>Stored Value: </strong>
-        <ContractData contract="SimpleStorage" method="storedData" />
+        <ContractData contract="SimpleStorage" method="storedData" /><br />
+        <ContractData contract="PostDB" method="getPostLen" /><br />
+        <ContractData contract="PostDB" method="posts" methodArgs={[0]} /><br />
       </p>
       {postList}
     </div>

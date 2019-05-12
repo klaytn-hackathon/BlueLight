@@ -30,6 +30,20 @@ contract PostDB {
         ));
     }
 
+    function modifyPost(uint256 postId, string memory title, string memory content, string memory tag) public {
+        posts[postId] = Post(
+            title,
+            content,
+            tag,
+            now,
+            false
+        );
+    }
+
+    function removePost(uint postId) public {
+        posts[postId].removed = true;
+    }
+
     function getPostLen() public view returns(uint256) {
         return posts.length;
     }

@@ -32,7 +32,6 @@ class EditorHeaderContainer extends Component {
     }
 
     handleGoBack = () => {
-        console.log('pbw 온 고백')
         const { history } = this.props;
         history.goBack();
     }
@@ -47,15 +46,10 @@ class EditorHeaderContainer extends Component {
             tags: tags && tags.trim()
         };
 
-        console.log("pbw", post)
         const { drizzle } = this.state
         const PostDB = await drizzle.contracts.PostDB
         const { accounts } = this.props
-        console.log('pbw PostDB? ', PostDB)
-        console.log("pbw accounts? ", accounts)
         await PostDB.methods.setPost.cacheSend(title, markdown, tags, { from: accounts[0] })
-
-
 
         return
 
