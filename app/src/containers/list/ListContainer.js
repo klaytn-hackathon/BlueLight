@@ -54,6 +54,7 @@ const drizzleListContainer = drizzleConnect(
         return {
             accounts: state.accounts,
             SimpleStorage: state.contracts.SimpleStorage,
+            PostDB: state.contracts.PostDB,
             TutorialToken: state.contracts.TutorialToken,
             drizzleStatus: state.drizzleStatus,
         }
