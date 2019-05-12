@@ -7,7 +7,13 @@ import queryString from 'query-string';
 
 import * as editorActions from 'store/modules/editor';
 
+import { drizzleConnect } from "drizzle-react";
+import { Drizzle } from 'drizzle'
+import drizzleOptions from '../../drizzleOptions'
+
 class EditorHeaderContainer extends Component {
+    state = { drizzle: null }
+
     componentDidMount() {
         const { EditorActions, location } = this.props;
         EditorActions.initialize(); // 에디터를 초기화한다.
@@ -19,9 +25,14 @@ class EditorHeaderContainer extends Component {
             // id가 존재하면 포스트 불러오기
             EditorActions.getPost(id);
         }
+
+        this.setState({
+            drizzle: new Drizzle(drizzleOptions)
+        })
     }
 
     handleGoBack = () => {
+        console.log('pbw 온 고백')
         const { history } = this.props;
         history.goBack();
     }
@@ -32,8 +43,21 @@ class EditorHeaderContainer extends Component {
             title,
             body: markdown,
             // 태그 텍스트를 ,로 분리시키고 앞뒤 공백을 지운 후 중복되는 값을 제거한다. // filter로 공백 태그도 제거한다.
-            tags: tags === "" ? [] : [...new Set(tags.split(',').map(tag => tag.trim()).filter(tag => tag !== ''))]
+            // tags: tags === "" ? [] : [...new Set(tags.split(',').map(tag => tag.trim()).filter(tag => tag !== ''))]
+            tags: tags && tags.trim()
         };
+
+        console.log("pbw", post)
+        const { drizzle } = this.state
+        const PostDB = await drizzle.contracts.PostDB
+        const { accounts } = this.props
+        console.log('pbw PostDB? ', PostDB)
+        console.log("pbw accounts? ", accounts)
+        await PostDB.methods.setPost.cacheSend(title, markdown, tags, { from: accounts[0] })
+
+
+
+        return
 
         try {
             // id가 존재하면 editPost 호출
@@ -67,6 +91,15 @@ class EditorHeaderContainer extends Component {
     }
 }
 
+const drizzleEditorHeaderContainer = drizzleConnect(
+    EditorHeaderContainer,
+    (state) => {
+        return {
+            accounts: state.accounts,
+        }
+    }
+)
+
 export default connect(
     (state) => ({
         title: state.editor.get('title'),
@@ -77,4 +110,4 @@ export default connect(
     (dispatch) => ({
         EditorActions: bindActionCreators(editorActions, dispatch)
     })
-)(withRouter(EditorHeaderContainer));
+)(withRouter(drizzleEditorHeaderContainer));
