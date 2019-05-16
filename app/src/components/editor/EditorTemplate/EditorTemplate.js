@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import styles from './EditorTemplate.scss';
 import classNames from 'classnames/bind';
 
-import { drizzleConnect } from 'drizzle-react'
-
 const cx = classNames.bind(styles);
 
 class EditorTemplate extends Component {
@@ -32,10 +30,7 @@ class EditorTemplate extends Component {
     document.body.addEventListener('mousemove', this.handleMouseMove);
     window.addEventListener('mouseup', this.handleMouseUp);
   }
-
-  componentDidMount() {
-    console.log("pbw this.props", this.props)
-  }
+  
 
   render() {
     const { header, editor, preview } = this.props;
@@ -76,18 +71,4 @@ class EditorTemplate extends Component {
   }
 }
 
-const drizzleEditorTemplate = drizzleConnect(
-  EditorTemplate,
-  (state) => {
-    console.log('pbw drizzle List', state)
-    return {
-      accounts: state.accounts,
-      SimpleStorage: state.contracts.SimpleStorage,
-      PostDB: state.contracts.PostDB,
-      TutorialToken: state.contracts.TutorialToken,
-      drizzleStatus: state.drizzleStatus,
-    }
-  }
-)
-
-export default drizzleEditorTemplate;
+export default EditorTemplate;

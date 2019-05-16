@@ -6,13 +6,13 @@ import Button from 'components/common/Button';
 
 const cx = classNames.bind(styles);
 
-const Header = ({ postId, onRemove }) => (
+const Header = ({ postId, onRemove, logged }) => (
     <header className={cx('header')}>
         <div className={cx('header-content')}>
             <div className={cx('brand')}>
                 <Link to="/">reactblog</Link>
             </div>
-            {<div className={cx('right')}>
+            {logged && <div className={cx('right')}>
                 {/* 조건에 따라 버튼 렌더링 */}
                 {
                     // flex를 유지하려고 배열 형태로 렌더링한다.

@@ -7,17 +7,13 @@ import EditorPaneContainer from 'containers/editor/EditorPaneContainer';
 // import PreviewPane from 'components/editor/PreviewPane';
 import PreviewPaneContainer from 'containers/editor/PreviewPaneContainer';
 
-import DrizzleWrapper from 'components/DrizzleWrapper'
-
 const EditorPage = () => {
     return (
-        <DrizzleWrapper>
-            <EditorTemplate
-                header={<EditorHeaderContainer />}
-                editor={<EditorPaneContainer />}
-                preview={<PreviewPaneContainer />}
-            />
-        </DrizzleWrapper>
+        <EditorTemplate
+            header={<EditorHeaderContainer />}
+            editor={<EditorPaneContainer />}
+            preview={<PreviewPaneContainer />}
+        />
     )
 }
 

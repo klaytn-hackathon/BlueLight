@@ -5,17 +5,9 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import removeMd from 'remove-markdown';
 
-import { Drizzle } from 'drizzle'
-
-import {
-  AccountData,
-  ContractData,
-  ContractForm,
-} from "drizzle-react-components";
-
 const cx = classNames.bind(styles);
 
-const PostItem = ({ title, body, publishedDate, tags, id }) => {
+const PostItem = ({title, body, publishedDate, tags, id}) => {
   const tagList = tags.map(
     tag => <Link key={tag} to={`/tag/${tag}`}>#{tag}</Link>
   );
@@ -32,7 +24,7 @@ const PostItem = ({ title, body, publishedDate, tags, id }) => {
   )
 }
 
-const PostList = ({ posts }) => {
+const PostList = ({posts}) => {
   const postList = posts.map(
     (post) => {
       const { _id, title, body, publishedDate, tags } = post.toJS();
@@ -52,12 +44,6 @@ const PostList = ({ posts }) => {
 
   return (
     <div className={cx('post-list')}>
-      <p>
-        <strong>Stored Value: </strong>
-        <ContractData contract="SimpleStorage" method="storedData" /><br />
-        <ContractData contract="PostDB" method="getPostLen" /><br />
-        <ContractData contract="PostDB" method="posts" methodArgs={[0]} /><br />
-      </p>
       {postList}
     </div>
   );
