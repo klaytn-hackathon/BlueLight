@@ -3,3 +3,5 @@ app/node_modules
 build
 app/src/contracts
 .DS_Store
+
+private_key.js

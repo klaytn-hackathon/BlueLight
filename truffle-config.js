@@ -4,7 +4,13 @@ const PrivateKeyConnector = require('connect-privkey-to-provider')
 const NETWORK_ID = "1001"
 const GAS_LIMIT = "20000000"
 const URL = "https://api.baobab.klaytn.net:8651"
-const PRIVATE_KEY = "0xfa647a4bd969ea063918964f08a3c5d9b3846b9f00485ff332067d3fb5f38d5a"
+/* 
+  input your private key to private_key.js file
+  like this...
+
+  module.exports = "(your private key)"
+*/
+const PRIVATE_KEY = require('./private_key')
 
 module.exports = {
   // See <http://truffleframework.com/docs/advanced/configuration>
