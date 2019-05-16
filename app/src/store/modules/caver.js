@@ -19,7 +19,7 @@ const initialState = Map({
     postDB: null
 });
 
-console.log("caver action", DEPLOYED_ABI)
+console.log("caver action", _DEPLOYED_ABI)
 
 // reducer
 export default handleActions({

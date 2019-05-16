@@ -20,9 +20,9 @@ class Base extends Component {
     }
 
     componentDidMount() {
-        console.log("pbw")
-        console.log("DEPLOYED_ADDRESS", DEPLOYED_ADDRESS)
-        console.log("DEPLOYED_ABI", DEPLOYED_ABI)
+        // console.log("pbw")
+        // console.log("DEPLOYED_ADDRESS", DEPLOYED_ADDRESS)
+        // console.log("DEPLOYED_ABI", DEPLOYED_ABI)
         this.initialize();
         this.caverInitialize()
     }
