@@ -357,8 +357,8 @@ module.exports = {
     // Makes some environment variables available to the JS code, for example:
     // if (process.env.NODE_ENV === 'development') { ... }. See `./env.js`.
     new webpack.DefinePlugin(Object.assign(env.stringified, {
-      DEPLOYED_ADDRESS: JSON.stringify(fs.readFileSync('../src/contracts/deployedAddress', 'utf8').replace(/\n|\r/g, "")),
-      DEPLOYED_ABI: fs.existsSync('../src/contracts/deployedABI') && fs.readFileSync('../deployedABI', 'utf8'),
+      DEPLOYED_ADDRESS: JSON.stringify(fs.readFileSync('src/contracts/deployedAddress', 'utf8').replace(/\n|\r/g, "")),
+      DEPLOYED_ABI: fs.existsSync('src/contracts/deployedABI') && fs.readFileSync('src/contracts/deployedABI', 'utf8'),
     })),
     // This is necessary to emit hot updates (currently CSS only):
     new webpack.HotModuleReplacementPlugin(),
