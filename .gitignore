@@ -5,3 +5,5 @@ app/src/contracts
 .DS_Store
 
 private_key.js
+app/src/deployedABI
+app/src/deployedAddress
