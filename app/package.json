@@ -1,5 +1,5 @@
 {
-  "name": "blog-frontend",
+  "name": "blue-light",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -130,6 +130,5 @@
     "presets": [
       "react-app"
     ]
-  },
-  "proxy": "http://localhost:4000"
+  }
 }

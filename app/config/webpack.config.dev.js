@@ -356,7 +356,10 @@ module.exports = {
     new ModuleNotFoundPlugin(paths.appPath),
     // Makes some environment variables available to the JS code, for example:
     // if (process.env.NODE_ENV === 'development') { ... }. See `./env.js`.
-    new webpack.DefinePlugin(env.stringified),
+    new webpack.DefinePlugin(Object.assign(env.stringified, {
+      DEPLOYED_ADDRESS: JSON.stringify(fs.readFileSync('../deployedAddress', 'utf8').replace(/\n|\r/g, "")),
+      DEPLOYED_ABI: fs.existsSync('../deployedABI') && fs.readFileSync('../deployedABI', 'utf8'),
+    })),
     // This is necessary to emit hot updates (currently CSS only):
     new webpack.HotModuleReplacementPlugin(),
     // Watcher doesn't work well if you mistype casing in a path so we use
