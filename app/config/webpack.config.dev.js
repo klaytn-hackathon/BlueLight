@@ -361,11 +361,17 @@ module.exports = {
     //   DEPLOYED_ADDRESS: JSON.stringify(fs.readFileSync('src/contracts/deployedAddress', 'utf8').replace(/\n|\r/g, "")),
     //   DEPLOYED_ABI: fs.existsSync('src/contracts/deployedABI') && fs.readFileSync('src/contracts/deployedABI', 'utf8'),
     // })),
+    // new webpack.DefinePlugin({
+    //   ...env.stringified,
+    //   DEPLOYED_ADDRESS: JSON.stringify(fs.readFileSync('src/contracts/deployedAddress', 'utf8').replace(/\n|\r/g, "")),
+    //   DEPLOYED_ABI: fs.existsSync('src/contracts/deployedABI') && fs.readFileSync('src/contracts/deployedABI', 'utf8'),
+    // }),
     new webpack.DefinePlugin({
       ...env.stringified,
-      DEPLOYED_ADDRESS: JSON.stringify(fs.readFileSync('src/contracts/deployedAddress', 'utf8').replace(/\n|\r/g, "")),
-      DEPLOYED_ABI: fs.existsSync('src/contracts/deployedABI') && fs.readFileSync('src/contracts/deployedABI', 'utf8'),
+      PBW: JSON.stringify("Hello bwpark!")
     }),
+
+    // new webpack.DefinePlugin(env.stringified),
 
     // This is necessary to emit hot updates (currently CSS only):
     new webpack.HotModuleReplacementPlugin(),
