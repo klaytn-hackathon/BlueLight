@@ -13,6 +13,10 @@ contract OwnerShip {
         require(msg.sender == superOwner, "onlySuperOwner");
         _;
     }
+    modifier onlyOwner() {
+        require(owners[msg.sender], "onlyOwner");
+        _;
+    }
 
     function changeSuperOwner(address _superOwner) public onlySuperOwner {
         superOwner = _superOwner;
@@ -60,14 +64,23 @@ contract PostDB is OwnerShip {
         _;
     }
     modifier onlyActivePost(uint256 postId) {
+        require(postId < posts.length, "post undefined");
         require(!posts[postId].removed, "this post was removed");
         _;
     }
 
     event AddPost(uint256 indexed postId, address indexed author, string indexed title, string content, string tag, uint256 publishedDate);
     event ModifyPost(uint256 indexed postId, address indexed author, string indexed title, string content, string tag, uint256 modifiedDate);
+    event DisablePost(uint256 postId);
+    event EnablePost(uint256 postId);
     
     // TODO: 포스트 수정기능 구현필요
+    /**
+        @dev 포스트 생성
+        @param title
+        @param content
+        @param tag
+    */
     function addPost(string memory title, string memory content, string memory tag) public returns(bool) {
         uint256 postId = posts.length;
         address author = msg.sender;
@@ -115,8 +128,24 @@ contract PostDB is OwnerShip {
         return true;
     }
 
-    function removePost(uint postId) public {
+    /**
+        @dev post를 비활성화한다.
+        @param postId 비활성화할 post의 id
+    */
+    function disablePost(uint postId) public onlyActivePost(postId) onlyAuthorOrAdmin(postId) returns(bool) {
         posts[postId].removed = true;
+        emit DisablePost(postId);
+        return true;
+    }
+    /**
+        @dev post를 활성화한다.
+             admin만 가능하다. (악성 포스트일 경우 author가 다시 enable 시키면 안되기 때문에)
+        @param postId 활성화할 post의 id
+    */
+    function enablePost(uint postId) public onlyActivePost(postId) onlyAdmin returns(bool) {
+        posts[postId].removed = false;
+        emit EnablePost(postId);
+        return true;
     }
 
     function getPostLen() public view returns(uint256) {
