@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { createAction, handleActions } from 'redux-actions';
 import { Map } from 'immutable';
 import { pender } from 'redux-pender';
@@ -20,16 +21,18 @@ const initialState = Map({
     postDB: null
 });
 
-console.log("caver actionPBW", PBW)
-console.log("JSON? ", JSON.stringify("nono pbw"))
-// console.log("caver action", DEPLOYED_ADDRESS)
+console.log("caver action", DEPLOYED_ABI)
+console.log("caver action", DEPLOYED_ADDRESS)
 
 // reducer
 export default handleActions({
     [INITIALIZE]: (state, action) => {
         const cav = new Caver('https://api.baobab.klaytn.net:8651')
-        // const postDB = cav.klay.Contract(DEPLOYED_ABI, DEPLOYED_ADDRESS)
-        const postDB = null
+        console.log("cav? ", cav)
+        console.log("cav.klay? ", cav.klay)
+        console.log("cav.klay.Contract? ", cav.klay.Contract)
+        const postDB = new cav.klay.Contract(DEPLOYED_ABI, DEPLOYED_ADDRESS)
+        console.log("postDB? ", postDB)
         return Map({
             cav,
             postDB,

@@ -1,13 +1,14 @@
 const fs = require('fs')
 
 const PostDB = artifacts.require("PostDB");
-const srcPath = 'app/src/contracts/'
+const srcPath = __dirname + '/../app/src/deployed/'
 
 module.exports = function(deployer) {
   deployer.deploy(PostDB)
     .then(() => {
       if(PostDB._json) {
-        fs.writeFile(srcPath + 'deployedABI', JSON.stringify(PostDB._json),
+        console.log("deployed path? ", srcPath)
+        fs.writeFile(srcPath + 'deployedABI', JSON.stringify(PostDB._json.abi),
           (err) => {
             if(err) throw err
             console.log("파일에 ABI입력 성공")

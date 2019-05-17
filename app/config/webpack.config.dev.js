@@ -356,19 +356,11 @@ module.exports = {
     new ModuleNotFoundPlugin(paths.appPath),
     // Makes some environment variables available to the JS code, for example:
     // if (process.env.NODE_ENV === 'development') { ... }. See `./env.js`.
-
-    // new webpack.DefinePlugin(Object.assign(env.stringified, {
-    //   DEPLOYED_ADDRESS: JSON.stringify(fs.readFileSync('src/contracts/deployedAddress', 'utf8').replace(/\n|\r/g, "")),
-    //   DEPLOYED_ABI: fs.existsSync('src/contracts/deployedABI') && fs.readFileSync('src/contracts/deployedABI', 'utf8'),
-    // })),
-    // new webpack.DefinePlugin({
-    //   ...env.stringified,
-    //   DEPLOYED_ADDRESS: JSON.stringify(fs.readFileSync('src/contracts/deployedAddress', 'utf8').replace(/\n|\r/g, "")),
-    //   DEPLOYED_ABI: fs.existsSync('src/contracts/deployedABI') && fs.readFileSync('src/contracts/deployedABI', 'utf8'),
-    // }),
+,
     new webpack.DefinePlugin({
       ...env.stringified,
-      PBW: JSON.stringify("Hello bwpark!")
+      DEPLOYED_ADDRESS: JSON.stringify(fs.readFileSync('src/deployed/deployedAddress', 'utf8').replace(/\n|\r/g, "")),
+      DEPLOYED_ABI: fs.existsSync('src/deployed/deployedABI') && fs.readFileSync('src/deployed/deployedABI', 'utf8'),
     }),
 
     // new webpack.DefinePlugin(env.stringified),
