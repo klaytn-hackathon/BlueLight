@@ -7,6 +7,13 @@ import * as listActions from 'store/modules/list';
 // import list from '../../store/modules/list';
 
 class ListContainer extends Component {
+    state = {
+        posts: [],
+        page: 0,
+        tag: "",
+        lastPage: false,
+    }
+
     getPostList = () => {
         // 페이지와 태그 값을 부모에게서 받아 온다.
         const { tag, page, ListActions } = this.props;
@@ -14,6 +21,7 @@ class ListContainer extends Component {
     };
 
     cavGetPostList = async () => {
+        console.log("this.state? ", this.state)
         var { cav, postDB } = this.props
         // console.log("this props?", this.props)
         // console.log("list cav? ", cav)
@@ -36,7 +44,10 @@ class ListContainer extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if(this.props.loading === false) {
+        if(
+            this.props.loading === false &&
+            prevProps.loading !== this.props.loading
+        ) {
             console.log("Cav 로딩 완료")
             this.cavGetPostList()
         }
@@ -52,10 +63,15 @@ class ListContainer extends Component {
     }
 
     render() {
-        const { loading, posts, page, lastPage, tag } = this.props;
+        // const { loading, posts, page, lastPage, tag } = this.props;
+        const { loading, page, lastPage, tag } = this.props;
+        const { posts } = this.state
 
         if (loading) return null; // 로딩중이면 아무것도 보이지 않는다.
         if (loading === undefined) return null
+
+        console.log("posts? ", posts)
+        console.log("this.state!!!", this.state)
 
         return (
             <div>
