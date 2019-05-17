@@ -10,7 +10,7 @@ class ListContainer extends Component {
     state = {
         posts: [],
         page: 0,
-        tag: "",
+        tag: [],
         lastPage: false,
     }
 
@@ -32,11 +32,19 @@ class ListContainer extends Component {
         const posts = []
         for(let i=0; i<postLen; i++) {
             const post = await postDB.methods.posts(i).call()
+            // TODO: 나중에 ID나 body를 post객체 변경 말고 PostList.js의 넘겨주는 값을 바꾸기
+            post._id = i
+            post.body = post.content
+            post.tags = ["tagA", "tagB"]
             posts.push(post)
         }
-        console.log("posts? ", posts)
+        console.log("cavGetPostList posts? ", posts)
         console.log("posts type? ", typeof posts)
         console.dir(posts)
+
+        this.setState({
+            posts
+        })
     }
 
     componentDidMount() {
@@ -44,6 +52,7 @@ class ListContainer extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
+        // 로딩이 true -> false로 변경시에만
         if(
             this.props.loading === false &&
             prevProps.loading !== this.props.loading
@@ -51,6 +60,9 @@ class ListContainer extends Component {
             console.log("Cav 로딩 완료")
             this.cavGetPostList()
         }
+
+        // TODO: 나중에 맞게 구현
+        /*
         // 페이지/태그가 바뀔 때 리스트를 다시 불러온다.
         if (
             prevProps.page !== this.props.page ||
@@ -60,6 +72,7 @@ class ListContainer extends Component {
             // 스크롤바를 맨 위로 올린다.
             document.documentElement.scrollTop = 0;
         }
+        */
     }
 
     render() {
