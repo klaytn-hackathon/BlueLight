@@ -30,6 +30,43 @@ class LoginModalContainer extends Component {
             this.handleLogin();
         }
     };
+    handleFileChange = (e) => {
+        // 파일 선택 시 호출
+        // TODO: 구현
+        const fileReader = new FileReader();
+        fileReader.readAsText(e.target.files[0]);
+        console.log("PBW e.tartget.files", e.target.files)
+        console.log("PBW e.tartget.result", e.target.result)
+        fileReader.onload = (e) => {
+            try {
+                console.log("PBW e.tartget.result", e.target.result)
+                if (!this.checkValidKeystore(e.target.result)) {
+                    // $('#message').text('유효하지 않은 keystore 파일입니다.');
+                    console.log("유효하지 않은 keystore 파일입니다. (if)")
+                    return;
+                }
+                // this.auth.keystore = e.target.result;
+                // TODO: this.auth 대신 store에 저장하기
+                // $('#message').text('keystore 통과. 비밀번호를 입력하세요.');
+                console.log("keystore 통과. 비밀번호를 입력하세요.")
+                // TODO: password인풋 칸에 focus 줄 수 있음 하기
+                // document.querySelector('#input-password').focus();
+            } catch (e) {
+                // $('#message').text('유효하지 않은 keystore 파일입니다.');
+                console.log("유효하지 않은 keystore 파일입니다. (catch)")
+                return;
+            }
+        }
+    }
+    checkValidKeystore = (keystore) => {
+        const parsedKeystore = JSON.parse(keystore);
+        const isValidKeystore = parsedKeystore.version &&
+            parsedKeystore.id &&
+            parsedKeystore.address &&
+            parsedKeystore.crypto;
+
+        return isValidKeystore;
+    }
 
     render() {
         const {
@@ -46,6 +83,7 @@ class LoginModalContainer extends Component {
                 onCancel={handleCancel}
                 onChange={handleChange}
                 onKeyPress={handleKeyPress}
+                onFileChange={this.handleFileChange}
                 visible={visible}
                 error={error}
                 password={password}

@@ -10,8 +10,8 @@ const Footer = ({ onLoginClick, logged }) => (
         <Link to="/" className={cx('brand')}>
             reactblog
         </Link>
-        <div className={cx('admin-login')} onClick={onLoginClick}>
-            {logged ? '로그아웃' : '관리자 로그인'}
+        <div className={cx('login')} onClick={onLoginClick}>
+            {logged ? '로그아웃' : '로그인'}
         </div>
     </footer>
 );

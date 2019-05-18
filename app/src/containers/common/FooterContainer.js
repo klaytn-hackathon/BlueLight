@@ -6,8 +6,10 @@ import * as baseActions from 'store/modules/base';
 
 class FooterContainer extends Component {
     handleLoginClick = async () => {
+        // TODO: 로그인작업 (계정인증)
         const { BaseActions, logged } = this.props;
         if (logged) {
+            // logout
             try {
                 await BaseActions.logout();
                 window.location.reload(); // 페이지 새로고침
@@ -17,6 +19,7 @@ class FooterContainer extends Component {
             return;
         }
 
+        // login
         BaseActions.showModal('login');
         BaseActions.initializeLoginModal();
     };
