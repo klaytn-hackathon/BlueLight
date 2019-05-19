@@ -6,29 +6,23 @@ import * as baseActions from 'store/modules/base';
 import * as caverActions from 'store/modules/caver';
 
 class LoginModalContainer extends Component {
-    state = {
-        message: '',
-    }
-
     handleLogin = async () => {
-        const { BaseActions, CaverActions, password, cav } = this.props;
+        const { BaseActions, CaverActions, password, cav, logged } = this.props;
         console.log("로그인 클릭", cav)
 
         try {
             CaverActions.login({ password })
+            // TODO: 로그인 후 logged 여부 확인하는 것 구현하기
             BaseActions.hideModal('login');
+            // console.log("result? ", result)
+            // setTimeout(() => {
+            //     console.log("logged? ", logged)
+            //     if (logged) {
+            //         BaseActions.hideModal('login');
+            //     }
+            // }, 1000)
         } catch (e) {
 
-        }
-        return
-
-        try {
-            // 로그인 시도, 성공하면 모달 닫기
-            await BaseActions.login(password);
-            BaseActions.hideModal('login');
-            localStorage.logged = 'true';
-        } catch (e) {
-            console.warn(e);
         }
     };
     handleCancel = () => {
@@ -46,31 +40,22 @@ class LoginModalContainer extends Component {
         }
     };
     handleFileChange = (e) => {
+        const { CaverActions } = this.props;
+
         // 파일 선택 시 호출
         const fileReader = new FileReader();
         fileReader.readAsText(e.target.files[0]);
-        console.log("PBW e.tartget.files", e.target.files)
-        console.log("PBW e.tartget.result", e.target.result)
         fileReader.onload = (e) => {
             try {
-                console.log("PBW e.tartget.result", e.target.result)
                 if (!this.checkValidKeystore(e.target.result)) {
-                    this.setState({
-                        message: '유효하지 않은 keystore 파일입니다.'
-                    })
+                    CaverActions.setMessage("유효하지 않은 keystore 파일입니다.")
                     return;
                 }
-                this.props.CaverActions.setKeyStore(e.target.result)
-                this.setState({
-                    message: 'keystore 통과. 비밀번호를 입력하세요.'
-                })
+                CaverActions.setKeyStore(e.target.result)
+                CaverActions.setMessage("keystore 통과. 비밀번호를 입력하세요.")
                 document.querySelector('#input-password').focus();
             } catch (e) {
-                // $('#message').text('유효하지 않은 keystore 파일입니다.');
-                console.log("유효하지 않은 keystore 파일입니다. (catch)")
-                this.setState({
-                    message: '오류발생'
-                })
+                CaverActions.setMessage("오류발생")
                 return;
             }
         }
@@ -92,7 +77,7 @@ class LoginModalContainer extends Component {
             handleChange,
             handleKeyPress,
         } = this;
-        const { visible, error, password } = this.props;
+        const { visible, error, password, message } = this.props;
 
         return (
             <LoginModal
@@ -104,7 +89,7 @@ class LoginModalContainer extends Component {
                 visible={visible}
                 error={error}
                 password={password}
-                message={this.state.message}
+                message={message}
             />
         );
     }
@@ -119,6 +104,8 @@ export default connect(
         // TODO: auth 나중ㅇ ㅔ제거
         auth: state.caver.get('auth'),
         cav: state.caver.get('cav'),
+        message: state.caver.get('message'),
+        logged: state.caver.get('logged'),
     }),
     (dispatch) => ({
         BaseActions: bindActionCreators(baseActions, dispatch),

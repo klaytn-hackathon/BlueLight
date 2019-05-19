@@ -35,7 +35,6 @@ class FooterContainer extends Component {
 
 export default connect(
     state => ({
-        // logged: state.base.get('logged'),
         logged: state.caver.get('logged'),
     }),
     dispatch => ({

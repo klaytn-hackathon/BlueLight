@@ -29,12 +29,14 @@ const INITIALIZE = 'caver/INITIALIZE';
 const SET_KEYSTORE = 'caver/SET_KEYSTORE';
 const LOGIN = 'caver/LOGIN';
 const LOGOUT = 'caver/LOGOUT';
+const SET_MESSAGE = 'caver/SET_MESSAGE';
 
 // action creators
 export const initialize = createAction(INITIALIZE, initCaver);
 export const setKeyStore = createAction(SET_KEYSTORE);
 export const login = createAction(LOGIN);
 export const logout = createAction(LOGOUT);
+export const setMessage = createAction(SET_MESSAGE);
 
 // initial state
 const initialState = Map({
@@ -46,6 +48,7 @@ const initialState = Map({
         password: '',
     },
     logged: false,
+    message: '',
     walletInstance: null,
 });
 
@@ -73,16 +76,19 @@ export default handleActions({
         console.log("[LOGIN]")
         const { password } = action.payload
         const cav = state.get('cav')
-
-        const privateKey = cav.klay.accounts.decrypt(state.getIn(['auth', 'keyStore']), password).privateKey;
-        console.log("private Key? ", privateKey)
-
-        const walletInstance = cav.klay.accounts.privateKeyToAccount(privateKey);
-        cav.klay.accounts.wallet.add(walletInstance)
-        console.log("walletInstance? ", walletInstance)
-        sessionStorage.setItem('walletInstance', JSON.stringify(walletInstance));
-        return state.set('walletInstance', walletInstance)
-            .set('logged', true)
+        console.log("state? ", state)
+        try {
+            const privateKey = cav.klay.accounts.decrypt(state.getIn(['auth', 'keyStore']), password).privateKey;
+            console.log("private Key? ", privateKey)
+            const walletInstance = cav.klay.accounts.privateKeyToAccount(privateKey);
+            cav.klay.accounts.wallet.add(walletInstance)
+            console.log("walletInstance? ", walletInstance)
+            sessionStorage.setItem('walletInstance', JSON.stringify(walletInstance));
+            return state.set('walletInstance', walletInstance)
+                .set('logged', true)
+        } catch (e) {
+            return state.set('message', "로그인 실패")
+        }
     },
     [LOGOUT]: (state, action) => {
         console.log("[LOGOUT]")
@@ -93,4 +99,7 @@ export default handleActions({
             .setIn(['auth', 'password'], '')
             .set('logged', false)
     },
+    [SET_MESSAGE]: (state, action) => {
+        return state.set('message', action.payload)
+    }
 }, initialState)

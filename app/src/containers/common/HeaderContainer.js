@@ -22,7 +22,7 @@ class HeaderContainer extends Component {
 
 export default connect(
     (state) => ({
-        logged: state.base.get('logged'),
+        logged: state.caver.get('logged'),
     }),
     (dispatch) => ({
         BaseActions: bindActionCreators(baseActions, dispatch),

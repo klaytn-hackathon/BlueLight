@@ -30,7 +30,7 @@ class ListContainer extends Component {
         const postLen = await postDB.methods.getPostLen().call()
         console.log("postLen? ", postLen)
         const posts = []
-        for(let i=0; i<postLen; i++) {
+        for (let i = 0; i < postLen; i++) {
             const post = await postDB.methods.posts(i).call()
             // TODO: 나중에 ID나 body를 post객체 변경 말고 PostList.js의 넘겨주는 값을 바꾸기
             post._id = i
@@ -53,7 +53,7 @@ class ListContainer extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         // 로딩이 true -> false로 변경시에만
-        if(
+        if (
             this.props.loading === false &&
             prevProps.loading !== this.props.loading
         ) {
@@ -88,12 +88,6 @@ class ListContainer extends Component {
 
         return (
             <div>
-                <div>
-                    <hr />
-                    {this.props.cav.klay.currentProvider.host}<br/>
-                    {this.props.postDB.currentProvider.host}
-                    <hr />
-                </div>
                 <PostList posts={posts} />
                 <Pagination page={page} lastPage={lastPage} tag={tag} />
             </div>
