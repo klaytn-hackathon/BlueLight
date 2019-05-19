@@ -16,8 +16,8 @@ const initCaver = () => {
             resolve({
                 cav, postDB
             })
-        } catch(err) {
-            if(err) throw err
+        } catch (err) {
+            if (err) throw err
             reject()
         }
     })
@@ -34,6 +34,11 @@ export const initialize = createAction(INITIALIZE, initCaver);
 const initialState = Map({
     cav: null,
     postDB: null,
+    auth: {
+        accessType: 'keyStore',
+        keyStore: '',
+        password: '',
+    }
 });
 
 

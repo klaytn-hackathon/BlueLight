@@ -5,6 +5,10 @@ import { bindActionCreators } from 'redux';
 import * as baseActions from 'store/modules/base';
 
 class LoginModalContainer extends Component {
+    state = {
+        message: '',
+    }
+
     handleLogin = async () => {
         const { BaseActions, password } = this.props;
         try {
@@ -41,19 +45,23 @@ class LoginModalContainer extends Component {
             try {
                 console.log("PBW e.tartget.result", e.target.result)
                 if (!this.checkValidKeystore(e.target.result)) {
-                    // $('#message').text('유효하지 않은 keystore 파일입니다.');
-                    console.log("유효하지 않은 keystore 파일입니다. (if)")
+                    this.setState({
+                        message: '유효하지 않은 keystore 파일입니다.'
+                    })
                     return;
                 }
                 // this.auth.keystore = e.target.result;
                 // TODO: this.auth 대신 store에 저장하기
-                // $('#message').text('keystore 통과. 비밀번호를 입력하세요.');
-                console.log("keystore 통과. 비밀번호를 입력하세요.")
-                // TODO: password인풋 칸에 focus 줄 수 있음 하기
-                // document.querySelector('#input-password').focus();
+                this.setState({
+                    message: 'keystore 통과. 비밀번호를 입력하세요.'
+                })
+                document.querySelector('#input-password').focus();
             } catch (e) {
                 // $('#message').text('유효하지 않은 keystore 파일입니다.');
                 console.log("유효하지 않은 keystore 파일입니다. (catch)")
+                this.setState({
+                    message: '유효하지 않은 keystore 파일입니다.'
+                })
                 return;
             }
         }
@@ -87,6 +95,7 @@ class LoginModalContainer extends Component {
                 visible={visible}
                 error={error}
                 password={password}
+                message={this.state.message}
             />
         );
     }
