@@ -3,6 +3,7 @@ import LoginModal from 'components/modal/LoginModal';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as baseActions from 'store/modules/base';
+import * as caverActions from 'store/modules/caver';
 
 class LoginModalContainer extends Component {
     state = {
@@ -10,7 +11,17 @@ class LoginModalContainer extends Component {
     }
 
     handleLogin = async () => {
-        const { BaseActions, password } = this.props;
+        const { BaseActions, CaverActions, password, cav } = this.props;
+        console.log("로그인 클릭", cav)
+
+        try {
+            CaverActions.login({ password })
+            BaseActions.hideModal('login');
+        } catch (e) {
+
+        }
+        return
+
         try {
             // 로그인 시도, 성공하면 모달 닫기
             await BaseActions.login(password);
@@ -36,7 +47,6 @@ class LoginModalContainer extends Component {
     };
     handleFileChange = (e) => {
         // 파일 선택 시 호출
-        // TODO: 구현
         const fileReader = new FileReader();
         fileReader.readAsText(e.target.files[0]);
         console.log("PBW e.tartget.files", e.target.files)
@@ -50,8 +60,7 @@ class LoginModalContainer extends Component {
                     })
                     return;
                 }
-                // this.auth.keystore = e.target.result;
-                // TODO: this.auth 대신 store에 저장하기
+                this.props.CaverActions.setKeyStore(e.target.result)
                 this.setState({
                     message: 'keystore 통과. 비밀번호를 입력하세요.'
                 })
@@ -60,7 +69,7 @@ class LoginModalContainer extends Component {
                 // $('#message').text('유효하지 않은 keystore 파일입니다.');
                 console.log("유효하지 않은 keystore 파일입니다. (catch)")
                 this.setState({
-                    message: '유효하지 않은 keystore 파일입니다.'
+                    message: '오류발생'
                 })
                 return;
             }
@@ -106,8 +115,13 @@ export default connect(
         visible: state.base.getIn(['modal', 'login']), // boolean
         password: state.base.getIn(['loginModal', 'password']),
         error: state.base.getIn(['loginModal', 'error']),
+
+        // TODO: auth 나중ㅇ ㅔ제거
+        auth: state.caver.get('auth'),
+        cav: state.caver.get('cav'),
     }),
     (dispatch) => ({
         BaseActions: bindActionCreators(baseActions, dispatch),
+        CaverActions: bindActionCreators(caverActions, dispatch),
     })
 )(LoginModalContainer);

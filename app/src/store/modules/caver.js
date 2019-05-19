@@ -26,9 +26,15 @@ const initCaver = () => {
 
 // action types
 const INITIALIZE = 'caver/INITIALIZE';
+const SET_KEYSTORE = 'caver/SET_KEYSTORE';
+const LOGIN = 'caver/LOGIN';
+const LOGOUT = 'caver/LOGOUT';
 
 // action creators
 export const initialize = createAction(INITIALIZE, initCaver);
+export const setKeyStore = createAction(SET_KEYSTORE);
+export const login = createAction(LOGIN);
+export const logout = createAction(LOGOUT);
 
 // initial state
 const initialState = Map({
@@ -38,7 +44,9 @@ const initialState = Map({
         accessType: 'keyStore',
         keyStore: '',
         password: '',
-    }
+    },
+    logged: false,
+    walletInstance: null,
 });
 
 
@@ -56,4 +64,33 @@ export default handleActions({
                 .set('loading', action.payload.loading)
         }
     }),
+    [SET_KEYSTORE]: (state, action) => {
+        console.log("[SET_KEYSTORE]")
+        console.log("actions.payload?", action.payload)
+        return state.setIn(['auth', 'keyStore'], action.payload);
+    },
+    [LOGIN]: (state, action) => {
+        console.log("[LOGIN]")
+        const { password } = action.payload
+        const cav = state.get('cav')
+
+        const privateKey = cav.klay.accounts.decrypt(state.getIn(['auth', 'keyStore']), password).privateKey;
+        console.log("private Key? ", privateKey)
+
+        const walletInstance = cav.klay.accounts.privateKeyToAccount(privateKey);
+        cav.klay.accounts.wallet.add(walletInstance)
+        console.log("walletInstance? ", walletInstance)
+        sessionStorage.setItem('walletInstance', JSON.stringify(walletInstance));
+        return state.set('walletInstance', walletInstance)
+            .set('logged', true)
+    },
+    [LOGOUT]: (state, action) => {
+        console.log("[LOGOUT]")
+        const cav = state.get('cav')
+        cav.klay.accounts.wallet.clear()
+        sessionStorage.removeItem('walletInstance')
+        return state.setIn(['auth', 'keyStore'], '')
+            .setIn(['auth', 'password'], '')
+            .set('logged', false)
+    },
 }, initialState)
