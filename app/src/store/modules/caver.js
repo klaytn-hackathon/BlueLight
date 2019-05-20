@@ -24,6 +24,18 @@ const initCaver = () => {
         }
     })
 }
+// const _getPost = (id) => {
+//     console.log("_getPost()", id)
+//     return new Promise((resolve, reject) => {
+//         try {
+//             // console.log("_getPost cav? ", this.initialState.cav)
+//             resolve()
+//         } catch (e) {
+//             if (e) throw e
+//             reject()
+//         }
+//     })
+// }
 
 
 // action types
@@ -33,6 +45,7 @@ const LOGIN = 'caver/LOGIN';
 const LOGOUT = 'caver/LOGOUT';
 const CHECK_LOGIN = 'caver/CHECK_LOGIN';
 const SET_MESSAGE = 'caver/SET_MESSAGE';
+const GET_POST = 'caver/GET_POST';
 const TEST = 'caver/TEST';
 
 // action creators
@@ -42,6 +55,8 @@ export const login = createAction(LOGIN);
 export const logout = createAction(LOGOUT);
 export const checkLogin = createAction(CHECK_LOGIN);
 export const setMessage = createAction(SET_MESSAGE);
+// export const getPost = createAction(GET_POST, _getPost);
+export const getPost = createAction(GET_POST);
 export const test = createAction(TEST);
 
 // initial state
@@ -112,6 +127,8 @@ export default handleActions({
     // },
     [CHECK_LOGIN]: (state, action) => {
         console.log("[CHECK_LOGIN]")
+        // TODO: cav와 postDB도 설정해줘야 한다.?
+
 
         const walletInstance = sessionStorage.getItem('walletInstance')
         console.log("checkLogin walletInstance? ", walletInstance)
@@ -119,6 +136,8 @@ export default handleActions({
         try {
             const cav = state.get('cav')
             console.log("체크로그인 cav? ", cav)
+            const postDB = state.get('postDB')
+            console.log("체크로그인 postDB? ", postDB)
             cav.klay.accounts.wallet.add(JSON.parse(walletInstance))
             console.log("체크로그인 wallet added ")
             return state.set('walletInstance', JSON.parse(walletInstance))
@@ -129,5 +148,13 @@ export default handleActions({
     },
     [SET_MESSAGE]: (state, action) => {
         return state.set('message', action.payload)
+    },
+    [GET_POST]: (state, action) => {
+        // TODO: 왜 checkLogin이 먼저 호출되지 않지?
+        console.log("GET_POST", action.payload)
+        const cav = state.get('cav')
+        const postDB = state.get('postDB')
+        console.log("GET_POST postDB? ", cav, postDB)
+        return state
     }
 }, initialState)

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PostInfo from 'components/post/PostInfo';
 import PostBody from 'components/post/PostBody';
 import * as postActions from 'store/modules/post';
+import * as caverActions from 'store/modules/caver';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import removeMd from 'remove-markdown';
@@ -9,9 +10,10 @@ import { Helmet } from 'react-helmet';
 
 class Post extends Component {
     initialize = async () => {
-        const { PostActions, id } = this.props;
+        const { PostActions, CaverActions, id } = this.props;
         try {
-            await PostActions.getPost(id);
+            // await PostActions.getPost(id);
+            await CaverActions.getPost(id);
         } catch (e) {
             console.log(e);
         }
@@ -48,9 +50,10 @@ class Post extends Component {
 export default connect(
     (state) => ({
         post: state.post.get('post'),
-        loading: state.pender.pending['post/GET_POST'] // 로딩 상태 (boolean)
+        loading: state.pender.pending['post/GET_POST'], // 로딩 상태 (boolean)
     }),
     (dispatch) => ({
-        PostActions: bindActionCreators(postActions, dispatch)
+        PostActions: bindActionCreators(postActions, dispatch),
+        CaverActions: bindActionCreators(caverActions, dispatch),
     })
 )(Post);
