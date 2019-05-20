@@ -90,7 +90,7 @@ export default handleActions({
             cav.klay.accounts.wallet.add(walletInstance)
             console.log("walletInstance? ", walletInstance)
             sessionStorage.setItem('walletInstance', JSON.stringify(walletInstance));
-            return state.set('walletInstance', walletInstance)
+            return state.set('walletInstance', JSON.parse(walletInstance))
                 .set('logged', true)
         } catch (e) {
             if(e) throw e
@@ -121,7 +121,7 @@ export default handleActions({
             console.log("체크로그인 cav? ", cav)
             cav.klay.accounts.wallet.add(JSON.parse(walletInstance))
             console.log("체크로그인 wallet added ")
-            return state.set('walletInstance', walletInstance)
+            return state.set('walletInstance', JSON.parse(walletInstance))
                 .set('logged', true)
         } catch(e) {
             if(e) throw e
