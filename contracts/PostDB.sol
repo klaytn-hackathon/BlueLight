@@ -2,8 +2,8 @@ pragma solidity 0.4.24;
 
 // TODO: 파일 분리하기
 contract OwnerShip {
-    address superOwner;
-    mapping(address => bool) owners;
+    address public superOwner;
+    mapping(address => bool) public owners;
 
     event ChangeSuperOwner(address _superOwner);
     event AddOwner(address _owner);
@@ -37,7 +37,7 @@ contract OwnerShip {
 contract PostDB is OwnerShip {
 
     struct Post {
-        uint256 id; // post의 id
+        uint256 _id; // post의 id
         address author; // post 작성자
         string title; // 제목
         string body; // 내용
@@ -55,11 +55,11 @@ contract PostDB is OwnerShip {
         owners[msg.sender] = true;
     }
 
-    modifier onlyAuthorOrAdmin(uint256 postId) {
+    modifier onlyAuthorOrOwner(uint256 postId) {
         require(
             msg.sender == posts[postId].author ||
             owners[msg.sender],
-            "onlyAuthorOrAdmin"
+            "onlyAuthorOrOwner"
         );
         _;
     }
@@ -77,9 +77,9 @@ contract PostDB is OwnerShip {
     // TODO: 포스트 수정기능 구현필요
     /**
         @dev 포스트 생성
-        @param title
-        @param body
-        @param tags
+        @param title 타이틀
+        @param body 바디
+        @param tags 태그
     */
     function addPost(string memory title, string memory body, string memory tags) public returns(bool) {
         uint256 postId = posts.length;
@@ -108,7 +108,7 @@ contract PostDB is OwnerShip {
         @param tags 수정된 tags
     */
     function modifyPost(uint256 postId, string memory title, string memory body, string memory tags)
-    public onlyActivePost(postId) onlyAuthorOrAdmin(postId) 
+    public onlyActivePost(postId) onlyAuthorOrOwner(postId) 
     returns(bool) {
         address author = posts[postId].author;
         uint256 publishedDate = posts[postId].publishedDate;
@@ -132,7 +132,7 @@ contract PostDB is OwnerShip {
         @dev post를 비활성화한다.
         @param postId 비활성화할 post의 id
     */
-    function disablePost(uint postId) public onlyActivePost(postId) onlyAuthorOrAdmin(postId) returns(bool) {
+    function disablePost(uint postId) public onlyActivePost(postId) onlyAuthorOrOwner(postId) returns(bool) {
         posts[postId].removed = true;
         emit DisablePost(postId);
         return true;
@@ -142,7 +142,7 @@ contract PostDB is OwnerShip {
              admin만 가능하다. (악성 포스트일 경우 author가 다시 enable 시키면 안되기 때문에)
         @param postId 활성화할 post의 id
     */
-    function enablePost(uint postId) public onlyActivePost(postId) onlyAdmin returns(bool) {
+    function enablePost(uint postId) public onlyActivePost(postId) onlyOwner returns(bool) {
         posts[postId].removed = false;
         emit EnablePost(postId);
         return true;

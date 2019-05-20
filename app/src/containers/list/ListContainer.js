@@ -34,9 +34,9 @@ class ListContainer extends Component {
         for (let i = 0; i < postLen; i++) {
             const post = await postDB.methods.posts(i).call()
             // TODO: 나중에 ID나 body를 post객체 변경 말고 PostList.js의 넘겨주는 값을 바꾸기
-            post._id = i
-            post.body = post.content
-            post.tags = ["tagA", "tagB"]
+            post.tags = post.tags.split(',').map((tag) => {
+                return tag.trim()
+            })
             posts.push(post)
         }
         console.log("cavGetPostList posts? ", posts)

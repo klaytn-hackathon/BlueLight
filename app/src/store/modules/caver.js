@@ -112,12 +112,6 @@ export default handleActions({
     // },
     [CHECK_LOGIN]: (state, action) => {
         console.log("[CHECK_LOGIN]")
-        // console.log("pbw 인터벌시작")
-        // await setInterval(() => {
-        //     console.log("pbw 인터벌중")
-        // }, 100)
-        // console.log("pbw 인터벌 끝")
-        // return
 
         const walletInstance = sessionStorage.getItem('walletInstance')
         console.log("checkLogin walletInstance? ", walletInstance)
