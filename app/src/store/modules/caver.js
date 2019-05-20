@@ -9,10 +9,12 @@ import * as api from 'lib/api';
 
 // util variables
 const initCaver = () => {
+    console.log("initCaver()")
     return new Promise((resolve, reject) => {
         try {
             const cav = new Caver('https://api.baobab.klaytn.net:8651')
             const postDB = new cav.klay.Contract(DEPLOYED_ABI, DEPLOYED_ADDRESS)
+            console.log("initCaver() Resolve")
             resolve({
                 cav, postDB
             })
@@ -29,14 +31,18 @@ const INITIALIZE = 'caver/INITIALIZE';
 const SET_KEYSTORE = 'caver/SET_KEYSTORE';
 const LOGIN = 'caver/LOGIN';
 const LOGOUT = 'caver/LOGOUT';
+const CHECK_LOGIN = 'caver/CHECK_LOGIN';
 const SET_MESSAGE = 'caver/SET_MESSAGE';
+const TEST = 'caver/TEST';
 
 // action creators
 export const initialize = createAction(INITIALIZE, initCaver);
 export const setKeyStore = createAction(SET_KEYSTORE);
 export const login = createAction(LOGIN);
 export const logout = createAction(LOGOUT);
+export const checkLogin = createAction(CHECK_LOGIN);
 export const setMessage = createAction(SET_MESSAGE);
+export const test = createAction(TEST);
 
 // initial state
 const initialState = Map({
@@ -87,6 +93,7 @@ export default handleActions({
             return state.set('walletInstance', walletInstance)
                 .set('logged', true)
         } catch (e) {
+            if(e) throw e
             return state.set('message', "로그인 실패")
         }
     },
@@ -98,6 +105,33 @@ export default handleActions({
         return state.setIn(['auth', 'keyStore'], '')
             .setIn(['auth', 'password'], '')
             .set('logged', false)
+    },
+    // [TEST]: (state, action) => {
+    //     console.log("[TEST]")
+    //     return state
+    // },
+    [CHECK_LOGIN]: (state, action) => {
+        console.log("[CHECK_LOGIN]")
+        // console.log("pbw 인터벌시작")
+        // await setInterval(() => {
+        //     console.log("pbw 인터벌중")
+        // }, 100)
+        // console.log("pbw 인터벌 끝")
+        // return
+
+        const walletInstance = sessionStorage.getItem('walletInstance')
+        console.log("checkLogin walletInstance? ", walletInstance)
+        if(!walletInstance) return state
+        try {
+            const cav = state.get('cav')
+            console.log("체크로그인 cav? ", cav)
+            cav.klay.accounts.wallet.add(JSON.parse(walletInstance))
+            console.log("체크로그인 wallet added ")
+            return state.set('walletInstance', walletInstance)
+                .set('logged', true)
+        } catch(e) {
+            if(e) throw e
+        }
     },
     [SET_MESSAGE]: (state, action) => {
         return state.set('message', action.payload)

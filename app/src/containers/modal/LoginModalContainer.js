@@ -7,22 +7,15 @@ import * as caverActions from 'store/modules/caver';
 
 class LoginModalContainer extends Component {
     handleLogin = async () => {
-        const { BaseActions, CaverActions, password, cav, logged } = this.props;
-        console.log("로그인 클릭", cav)
-
+        const { BaseActions, CaverActions, password } = this.props;
         try {
-            CaverActions.login({ password })
-            // TODO: 로그인 후 logged 여부 확인하는 것 구현하기
-            BaseActions.hideModal('login');
-            // console.log("result? ", result)
-            // setTimeout(() => {
-            //     console.log("logged? ", logged)
-            //     if (logged) {
-            //         BaseActions.hideModal('login');
-            //     }
-            // }, 1000)
+            await CaverActions.login({ password })
+            // 로그인 성공 시에만 hideModal
+            if(true === this.props.logged) {
+                BaseActions.hideModal('login');
+            }
         } catch (e) {
-
+            if(e) throw e
         }
     };
     handleCancel = () => {
@@ -101,9 +94,6 @@ export default connect(
         password: state.base.getIn(['loginModal', 'password']),
         error: state.base.getIn(['loginModal', 'error']),
 
-        // TODO: auth 나중ㅇ ㅔ제거
-        auth: state.caver.get('auth'),
-        cav: state.caver.get('cav'),
         message: state.caver.get('message'),
         logged: state.caver.get('logged'),
     }),

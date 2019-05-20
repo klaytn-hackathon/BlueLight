@@ -4,6 +4,7 @@ import Pagination from 'components/list/Pagination';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as listActions from 'store/modules/list';
+import * as caverActions from 'store/modules/caver';
 // import list from '../../store/modules/list';
 
 class ListContainer extends Component {
@@ -107,5 +108,6 @@ export default connect(
     }),
     (dispatch) => ({
         ListActions: bindActionCreators(listActions, dispatch),
+        CaverActions: bindActionCreators(caverActions, dispatch),
     })
 )(ListContainer);

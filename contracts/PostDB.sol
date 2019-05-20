@@ -40,8 +40,8 @@ contract PostDB is OwnerShip {
         uint256 id; // post의 id
         address author; // post 작성자
         string title; // 제목
-        string content; // 내용
-        string tag; // 태그(콤마로 구분)
+        string body; // 내용
+        string tags; // 태그(콤마로 구분)
         uint256 publishedDate; // 작성한 시간
         uint256 modifiedDate; // 최근 수정 시간
         bool removed; // 삭제되었는지 여부
@@ -69,8 +69,8 @@ contract PostDB is OwnerShip {
         _;
     }
 
-    event AddPost(uint256 indexed postId, address indexed author, string indexed title, string content, string tag, uint256 publishedDate);
-    event ModifyPost(uint256 indexed postId, address indexed author, string indexed title, string content, string tag, uint256 modifiedDate);
+    event AddPost(uint256 indexed postId, address indexed author, string indexed title, string body, string tags, uint256 publishedDate);
+    event ModifyPost(uint256 indexed postId, address indexed author, string indexed title, string body, string tags, uint256 modifiedDate);
     event DisablePost(uint256 postId);
     event EnablePost(uint256 postId);
     
@@ -78,10 +78,10 @@ contract PostDB is OwnerShip {
     /**
         @dev 포스트 생성
         @param title
-        @param content
-        @param tag
+        @param body
+        @param tags
     */
-    function addPost(string memory title, string memory content, string memory tag) public returns(bool) {
+    function addPost(string memory title, string memory body, string memory tags) public returns(bool) {
         uint256 postId = posts.length;
         address author = msg.sender;
         uint256 publishedDate = now;
@@ -90,13 +90,13 @@ contract PostDB is OwnerShip {
             postId,
             author,
             title,
-            content,
-            tag,
+            body,
+            tags,
             publishedDate,
             publishedDate, // modifiedDate
             removed
         ));
-        emit AddPost(postId, author, title, content, tag, publishedDate);
+        emit AddPost(postId, author, title, body, tags, publishedDate);
         return true;
     }
 
@@ -104,10 +104,10 @@ contract PostDB is OwnerShip {
         @dev 삭제되지 않은 포스트만 수정 가능
         @param postId 수정할 post의 id
         @param title 수정된 tilte
-        @param content 수정된 content
-        @param tag 수정된 tag
+        @param body 수정된 body
+        @param tags 수정된 tags
     */
-    function modifyPost(uint256 postId, string memory title, string memory content, string memory tag)
+    function modifyPost(uint256 postId, string memory title, string memory body, string memory tags)
     public onlyActivePost(postId) onlyAuthorOrAdmin(postId) 
     returns(bool) {
         address author = posts[postId].author;
@@ -118,13 +118,13 @@ contract PostDB is OwnerShip {
             postId,
             author,
             title,
-            content,
-            tag,
+            body,
+            tags,
             publishedDate,
             modifiedDate,
             removed
         );
-        emit ModifyPost(postId, author, title, content, tag, modifiedDate);
+        emit ModifyPost(postId, author, title, body, tags, modifiedDate);
         return true;
     }
 

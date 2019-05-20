@@ -7,7 +7,6 @@ import * as caverActions from 'store/modules/caver';
 
 class FooterContainer extends Component {
     handleLoginClick = async () => {
-        // TODO: 로그인작업 (계정인증)
         const { BaseActions, CaverActions, logged } = this.props;
         if (logged) {
             // logout
@@ -29,6 +28,8 @@ class FooterContainer extends Component {
     render() {
         const { handleLoginClick } = this;
         const { logged } = this.props;
+        console.log("Footer logged? ", logged)
+        console.log("Footer logged2? ", this.props.logged)
         return <Footer onLoginClick={handleLoginClick} logged={logged} />;
     }
 }
