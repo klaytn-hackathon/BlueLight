@@ -49,10 +49,14 @@ class ListContainer extends Component {
     }
 
     componentDidMount() {
-        console.log("didmount")
+        console.log("ListContainer didmount")
+        if (this.props.loading === false) {
+            this.cavGetPostList()
+        }
     }
 
     componentDidUpdate(prevProps, prevState) {
+        console.log("ListContainer DidUpdate")
         // 로딩이 true -> false로 변경시에만
         if (
             this.props.loading === false &&

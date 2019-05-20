@@ -90,10 +90,10 @@ export default handleActions({
             cav.klay.accounts.wallet.add(walletInstance)
             console.log("walletInstance? ", walletInstance)
             sessionStorage.setItem('walletInstance', JSON.stringify(walletInstance));
-            return state.set('walletInstance', JSON.parse(walletInstance))
+            return state.set('walletInstance', walletInstance)
                 .set('logged', true)
         } catch (e) {
-            if(e) throw e
+            if (e) throw e
             return state.set('message', "로그인 실패")
         }
     },
@@ -115,7 +115,7 @@ export default handleActions({
 
         const walletInstance = sessionStorage.getItem('walletInstance')
         console.log("checkLogin walletInstance? ", walletInstance)
-        if(!walletInstance) return state
+        if (!walletInstance) return state
         try {
             const cav = state.get('cav')
             console.log("체크로그인 cav? ", cav)
@@ -123,8 +123,8 @@ export default handleActions({
             console.log("체크로그인 wallet added ")
             return state.set('walletInstance', JSON.parse(walletInstance))
                 .set('logged', true)
-        } catch(e) {
-            if(e) throw e
+        } catch (e) {
+            if (e) throw e
         }
     },
     [SET_MESSAGE]: (state, action) => {
