@@ -11,6 +11,7 @@ const CHANGE_INPUT = 'editor/CHANGE_INPUT';
 const WRITE_POST = 'editor/WRITE_POST';
 const GET_POST = 'editor/GET_POST';
 const EDIT_POST = 'editor/EDIT_POST';
+const SET_POST = 'editor/SET_POST';
 
 // action creators
 export const initialize = createAction(INITIALIZE);
@@ -18,6 +19,8 @@ export const changeInput = createAction(CHANGE_INPUT);
 export const writePost = createAction(WRITE_POST, api.writePost);
 export const getPost = createAction(GET_POST, api.getPost);
 export const editPost = createAction(EDIT_POST, api.editPost);
+export const setPost = createAction(SET_POST);
+
 
 // initial state
 const initialState = Map({
@@ -49,5 +52,11 @@ export default handleActions({
                 .set('markdown', body)
                 .set('tags', tags.join(', '));
         }
-    })
+    }),
+    [SET_POST]: (state, action) => {
+        const { title, body, tags } = action.payload
+        return state.set('title', title)
+                .set('markdown', body)
+                .set('tags', tags);
+    },
 }, initialState)

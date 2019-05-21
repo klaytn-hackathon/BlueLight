@@ -57,6 +57,12 @@ const initialState = Map({
     logged: false,
     message: '',
     walletInstance: null,
+    post: {
+        postId: null,
+        title: '',
+        body: '',
+        tags: '',
+    },
 });
 
 
@@ -130,5 +136,10 @@ export default handleActions({
     },
     [SET_MESSAGE]: (state, action) => {
         return state.set('message', action.payload)
+    },
+    [GET_POST]: (state, action) => {
+        console.log("[GET_POST]")
+        console.log("[GET_POST] state? ", state)
+        return state
     },
 }, initialState)

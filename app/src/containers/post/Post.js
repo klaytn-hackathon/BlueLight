@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
 import PostInfo from 'components/post/PostInfo';
 import PostBody from 'components/post/PostBody';
-import * as postActions from 'store/modules/post';
-import * as caverActions from 'store/modules/caver';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import removeMd from 'remove-markdown';
 import { Helmet } from 'react-helmet';
+// import * as caverActions from 'store/modules/caver';
 
 class Post extends Component {
     state = {
         post: null,
     }
     initialize = async () => {
-        const { PostActions, CaverActions, id, cav, postDB } = this.props;
+        const { id, postDB } = this.props;
         try {
             const post = await postDB.methods.posts(id).call()
+            console.log("Post.js init? ", post)
             this.setState({ post })
         } catch (e) {
             if(e) throw e
@@ -23,12 +23,14 @@ class Post extends Component {
     }
 
     componentDidMount() {
+        console.log("Post.js 마운트")
         if (this.props.loading === false) {
             this.initialize();
         }
     }
 
     componentDidUpdate(prevProps, prevState) {
+        console.log("Post.js 업데이트")
         // 로딩이 true -> false로 변경시에만
         if (
             this.props.loading === false &&
@@ -65,14 +67,10 @@ class Post extends Component {
 
 export default connect(
     (state) => ({
-        post: state.post.get('post'),
-        // loading: state.pender.pending['post/GET_POST'], // 로딩 상태 (boolean)
-        loading: state.pender.pending['caver/INITIALIZE'],
-        cav: state.caver.get('cav'),
         postDB: state.caver.get('postDB'),
+        loading: state.pender.pending['caver/INITIALIZE'],
     }),
     (dispatch) => ({
-        PostActions: bindActionCreators(postActions, dispatch),
-        CaverActions: bindActionCreators(caverActions, dispatch),
+        // CaverActions: bindActionCreators(caverActions, dispatch),
     })
 )(Post);
