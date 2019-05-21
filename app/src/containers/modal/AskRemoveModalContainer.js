@@ -12,14 +12,22 @@ class AskRemoveModalContainer extends Component {
         BaseActions.hideModal('remove');
     }
     handleConfirm = async () => {
-        const { BaseActions, PostActions, match, history } = this.props;
+        console.log("삭제 클릭")
+        const { BaseActions, PostActions, match, history, postDB, walletInstance, gas } = this.props;
         const { id } = match.params;
 
         // 포스트 삭제 후 모달을 닫고 메인 페이지로 이동
         try {
-            await PostActions.removePost(id);
-            BaseActions.hideModal('remove');
-            history.push('/');
+            // await PostActions.removePost(id);
+            await postDB.methods.disablePost(id).send({
+                from: walletInstance.address,
+                gas
+            })
+            .then((receipt) => {
+                BaseActions.hideModal('remove');
+                // TODO: Can't perform a React state update on an unmounted component 에러가 뜨네
+                history.push('/');
+            })
         }
         catch (e) {
             console.error(e);
@@ -42,7 +50,10 @@ class AskRemoveModalContainer extends Component {
 
 export default connect(
     (state) => ({
-        visible: state.base.getIn(['modal', 'remove'])
+        visible: state.base.getIn(['modal', 'remove']),
+        postDB: state.caver.get('postDB'),
+        walletInstance: state.caver.get('walletInstance'),
+        gas: state.caver.get('gas'),
     }),
     (dispatch) => ({
         BaseActions: bindActionCreators(baseActions, dispatch),

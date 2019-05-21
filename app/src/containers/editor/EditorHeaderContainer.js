@@ -84,20 +84,21 @@ class EditorHeaderContainer extends Component {
     }
 
     modifyPost = async (id, post) => {
-        const { postDB, walletInstance } = this.props
+        const { postDB, walletInstance, gas } = this.props
+        console.log("gas? ", gas)
         const {title, body, tags} = post
         return postDB.methods.modifyPost(id, title, body, tags).send({
             from: walletInstance.address,
-            gas: 2500000,
+            gas,
         })
     }
 
     addPost = async (post) => {
-        const { postDB, walletInstance } = this.props
+        const { postDB, walletInstance, gas } = this.props
         const {title, body, tags} = post
         postDB.methods.addPost(title, body, tags).send({
             from: walletInstance.address,
-            gas: 2500000,
+            gas,
         })
     }
 
@@ -124,6 +125,7 @@ export default connect(
         postDB: state.caver.get('postDB'),
         walletInstance: state.caver.get('walletInstance'),
         loading: state.pender.pending['caver/INITIALIZE'],
+        gas: state.caver.get('gas'),
     }),
     (dispatch) => ({
         EditorActions: bindActionCreators(editorActions, dispatch),

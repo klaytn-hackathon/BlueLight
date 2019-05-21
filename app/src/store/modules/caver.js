@@ -49,6 +49,7 @@ export const test = createAction(TEST);
 const initialState = Map({
     cav: null,
     postDB: null,
+    gas: 2500000,
     auth: {
         accessType: 'keyStore',
         keyStore: '',
