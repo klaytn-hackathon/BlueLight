@@ -9,26 +9,42 @@ import removeMd from 'remove-markdown';
 import { Helmet } from 'react-helmet';
 
 class Post extends Component {
+    state = {
+        post: null,
+    }
     initialize = async () => {
-        const { PostActions, CaverActions, id } = this.props;
+        const { PostActions, CaverActions, id, cav, postDB } = this.props;
         try {
-            // await PostActions.getPost(id);
-            await CaverActions.getPost(id);
+            const post = await postDB.methods.posts(id).call()
+            this.setState({ post })
         } catch (e) {
-            console.log(e);
+            if(e) throw e
         }
     }
 
     componentDidMount() {
-        this.initialize();
+        if (this.props.loading === false) {
+            this.initialize();
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        // 로딩이 true -> false로 변경시에만
+        if (
+            this.props.loading === false &&
+            prevProps.loading !== this.props.loading
+        ) {
+            this.initialize();
+        }
     }
 
     render() {
-        const { loading, post } = this.props;
+        const { post } = this.state
 
-        if (loading) return null; // 로딩 중에는 아무것도 보여주지 않음.
+        if(!!!post) return null // post가 없으면 보여주지 않음
 
-        const { title, body, publishedDate, tags } = post.toJS();
+        // const { title, body, publishedDate, tags } = post.toJS();
+        const { title, body, publishedDate, tags } = post;
 
         return (
             <div>
@@ -50,7 +66,10 @@ class Post extends Component {
 export default connect(
     (state) => ({
         post: state.post.get('post'),
-        loading: state.pender.pending['post/GET_POST'], // 로딩 상태 (boolean)
+        // loading: state.pender.pending['post/GET_POST'], // 로딩 상태 (boolean)
+        loading: state.pender.pending['caver/INITIALIZE'],
+        cav: state.caver.get('cav'),
+        postDB: state.caver.get('postDB'),
     }),
     (dispatch) => ({
         PostActions: bindActionCreators(postActions, dispatch),

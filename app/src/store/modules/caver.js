@@ -14,7 +14,7 @@ const initCaver = () => {
         try {
             const cav = new Caver('https://api.baobab.klaytn.net:8651')
             const postDB = new cav.klay.Contract(DEPLOYED_ABI, DEPLOYED_ADDRESS)
-            console.log("initCaver() Resolve")
+            console.log("initCaver() Resolve", cav, postDB)
             resolve({
                 cav, postDB
             })
@@ -24,19 +24,6 @@ const initCaver = () => {
         }
     })
 }
-// const _getPost = (id) => {
-//     console.log("_getPost()", id)
-//     return new Promise((resolve, reject) => {
-//         try {
-//             // console.log("_getPost cav? ", this.initialState.cav)
-//             resolve()
-//         } catch (e) {
-//             if (e) throw e
-//             reject()
-//         }
-//     })
-// }
-
 
 // action types
 const INITIALIZE = 'caver/INITIALIZE';
@@ -55,7 +42,6 @@ export const login = createAction(LOGIN);
 export const logout = createAction(LOGOUT);
 export const checkLogin = createAction(CHECK_LOGIN);
 export const setMessage = createAction(SET_MESSAGE);
-// export const getPost = createAction(GET_POST, _getPost);
 export const getPost = createAction(GET_POST);
 export const test = createAction(TEST);
 
@@ -73,10 +59,6 @@ const initialState = Map({
     walletInstance: null,
 });
 
-
-
-// console.log("caver action", DEPLOYED_ABI)
-// console.log("caver action", DEPLOYED_ADDRESS)
 
 // reducer
 export default handleActions({
@@ -149,12 +131,4 @@ export default handleActions({
     [SET_MESSAGE]: (state, action) => {
         return state.set('message', action.payload)
     },
-    [GET_POST]: (state, action) => {
-        // TODO: 왜 checkLogin이 먼저 호출되지 않지?
-        console.log("GET_POST", action.payload)
-        const cav = state.get('cav')
-        const postDB = state.get('postDB')
-        console.log("GET_POST postDB? ", cav, postDB)
-        return state
-    }
 }, initialState)
