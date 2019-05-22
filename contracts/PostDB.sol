@@ -132,19 +132,9 @@ contract PostDB is OwnerShip {
         @dev post를 비활성화한다.
         @param postId 비활성화할 post의 id
     */
-    function disablePost(uint postId) public onlyActivePost(postId) onlyAuthorOrOwner(postId) returns(bool) {
+    function removePost(uint postId) public onlyActivePost(postId) onlyAuthorOrOwner(postId) returns(bool) {
         posts[postId].removed = true;
         emit DisablePost(postId);
-        return true;
-    }
-    /**
-        @dev post를 활성화한다.
-             admin만 가능하다. (악성 포스트일 경우 author가 다시 enable 시키면 안되기 때문에)
-        @param postId 활성화할 post의 id
-    */
-    function enablePost(uint postId) public onlyActivePost(postId) onlyOwner returns(bool) {
-        posts[postId].removed = false;
-        emit EnablePost(postId);
         return true;
     }
 

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PostInfo from 'components/post/PostInfo';
 import PostBody from 'components/post/PostBody';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux';
 import removeMd from 'remove-markdown';
 import { Helmet } from 'react-helmet';
@@ -12,9 +13,16 @@ class Post extends Component {
         post: null,
     }
     initialize = async () => {
-        const { id, postDB } = this.props;
+        const { id, postDB, history } = this.props;
         try {
             const post = await postDB.methods.posts(id).call()
+            if(post.removed) {
+                // 삭제된 포스트는 출력하지 않는다.
+                alert("삭제된 포스트입니다.")
+                console.log("history? ", history)
+                history.push('/')
+                return
+            }
             console.log("Post.js init? ", post)
             this.setState({ post })
         } catch (e) {
@@ -73,4 +81,4 @@ export default connect(
     (dispatch) => ({
         // CaverActions: bindActionCreators(caverActions, dispatch),
     })
-)(Post);
+)(withRouter(Post));

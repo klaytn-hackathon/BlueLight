@@ -12,7 +12,7 @@ class ListContainer extends Component {
         posts: [],
         page: 0,
         tag: [],
-        lastPage: false,
+        lastPage: 0,
     }
 
     getPostList = () => {
@@ -23,28 +23,47 @@ class ListContainer extends Component {
 
     cavGetPostList = async () => {
         console.log("this.state? ", this.state)
-        var { cav, postDB } = this.props
-        // console.log("this props?", this.props)
-        // console.log("list cav? ", cav)
-        // console.log("list postDB? ", postDB)
+        const { cav, postDB, page, tag } = this.props
+        console.log("cavGetPostList tag? ", tag)
 
         const postLen = await postDB.methods.getPostLen().call()
         console.log("postLen? ", postLen)
+        console.log("page? ", page)
+        if(postLen <= (page-1)*10) {
+            return
+        }
         const posts = []
-        for (let i = 0; i < postLen; i++) {
+        ////////////////////
+        // page 1 => 0~9
+        // page 2 => 10~19
+        ////////////////////
+        let size = (page*10)
+        for (let i = (page-1) * 10; (i < size && i < postLen); i++) {
             const post = await postDB.methods.posts(i).call()
-            // TODO: 나중에 ID나 body를 post객체 변경 말고 PostList.js의 넘겨주는 값을 바꾸기
+            if(post.removed === true) {
+                // 삭제된 post는 포함시키지 않기
+                size++
+                continue
+            }
             post.tags = post.tags.split(',').map((tag) => {
                 return tag.trim()
             })
+            if(tag && !post.tags.includes(tag)) {
+                size++
+                continue
+            }
+            console.log("tag 일치하는 Post? ", post)
             posts.push(post)
         }
         console.log("cavGetPostList posts? ", posts)
         console.log("posts type? ", typeof posts)
         console.dir(posts)
 
+        console.log("lastPage? ", Math.ceil(postLen / 10))
+
         this.setState({
-            posts
+            posts,
+            lastPage: Math.ceil(postLen / 10) // lastPage 소수점 올림
         })
     }
 
@@ -59,6 +78,7 @@ class ListContainer extends Component {
         console.log("ListContainer DidUpdate")
         // 로딩이 true -> false로 변경시에만
         if (
+            // this.props.loading === false
             this.props.loading === false &&
             prevProps.loading !== this.props.loading
         ) {
@@ -67,23 +87,24 @@ class ListContainer extends Component {
         }
 
         // TODO: 나중에 맞게 구현
-        /*
         // 페이지/태그가 바뀔 때 리스트를 다시 불러온다.
         if (
             prevProps.page !== this.props.page ||
             prevProps.tag !== this.props.tag
         ) {
-            this.getPostList();
+            console.log("page나 tag가 바뀜")
+            // this.getPostList();
+            this.cavGetPostList()
             // 스크롤바를 맨 위로 올린다.
             document.documentElement.scrollTop = 0;
         }
-        */
     }
 
     render() {
         // const { loading, posts, page, lastPage, tag } = this.props;
-        const { loading, page, lastPage, tag } = this.props;
-        const { posts } = this.state
+        // const { loading, page, lastPage, tag } = this.props;
+        const { loading, page, tag } = this.props;
+        const { posts, lastPage } = this.state
 
         if (loading) return null; // 로딩중이면 아무것도 보이지 않는다.
         if (loading === undefined) return null

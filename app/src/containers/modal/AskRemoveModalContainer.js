@@ -18,12 +18,14 @@ class AskRemoveModalContainer extends Component {
 
         // 포스트 삭제 후 모달을 닫고 메인 페이지로 이동
         try {
-            // await PostActions.removePost(id);
+            // TODO: remove로 변경
+            // await postDB.methods.removePost(id).send({
             await postDB.methods.disablePost(id).send({
                 from: walletInstance.address,
                 gas
             })
             .then((receipt) => {
+                console.log("삭제 receipt? ", receipt)
                 BaseActions.hideModal('remove');
                 // TODO: Can't perform a React state update on an unmounted component 에러가 뜨네
                 history.push('/');
