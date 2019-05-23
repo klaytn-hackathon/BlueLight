@@ -20,6 +20,9 @@ class RewardsModalContainer extends Component {
     handleCancel = () => {
         const { BaseActions } = this.props;
         BaseActions.hideModal('rewards');
+        this.setState({
+            rewardsAmount: 1
+        })
     }
     handleConfirm = async () => {
         const { BaseActions, postDB, walletInstance, gas, cav } = this.props;
