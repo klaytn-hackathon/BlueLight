@@ -85,7 +85,7 @@ class EditorHeaderContainer extends Component {
     addPost = async (post) => {
         const { postDB, walletInstance, gas } = this.props
         const {title, body, tags} = post
-        postDB.methods.addPost(title, body, tags).send({
+        await postDB.methods.addPost(title, body, tags).send({
             from: walletInstance.address,
             gas,
         })
