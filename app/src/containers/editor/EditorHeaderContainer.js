@@ -51,8 +51,6 @@ class EditorHeaderContainer extends Component {
         const post = {
             title,
             body: markdown,
-            // 태그 텍스트를 ,로 분리시키고 앞뒤 공백을 지운 후 중복되는 값을 제거한다. // filter로 공백 태그도 제거한다.
-            // tags: tags === "" ? [] : [...new Set(tags.split(',').map(tag => tag.trim()).filter(tag => tag !== ''))]
             tags
         };
 
@@ -63,21 +61,13 @@ class EditorHeaderContainer extends Component {
                 // await EditorActions.editPost({ id, ...post });
                 await this.modifyPost(id, post)
                 .then((receipt) => {
-                    // TODO: Loading 보여줘야하나
-                    console.log("then receipt? ", receipt)
                     history.push(`/post/${id}`);
                 })
                 return;
             }
 
-            // await EditorActions.writePost(post);
             await this.addPost(post)
             history.push('/')
-            return
-
-            // 페이지를 이동시킨다.
-            // 주의: postId는 위쪽에서 레퍼런스를 만들지 않고 이 자리에서 this.props.postId를 조회해야 한다.(현재 값을 불러오기 위해)
-            history.push(`/post/${this.props.postId}`);
         } catch (e) {
             if(e) throw e
         }
@@ -85,7 +75,6 @@ class EditorHeaderContainer extends Component {
 
     modifyPost = async (id, post) => {
         const { postDB, walletInstance, gas } = this.props
-        console.log("gas? ", gas)
         const {title, body, tags} = post
         return postDB.methods.modifyPost(id, title, body, tags).send({
             from: walletInstance.address,

@@ -36,7 +36,6 @@ export default connect(
         title: state.editor.get('title'),
         markdown: state.editor.get('markdown'),
         tags: state.editor.get('tags'),
-        // cav: state.caver.get('cav'),
         postDB: state.caver.get('postDB'),
     }),
     (dispatch) => ({

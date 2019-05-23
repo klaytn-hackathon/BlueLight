@@ -19,11 +19,9 @@ class Post extends Component {
             if(post.removed) {
                 // 삭제된 포스트는 출력하지 않는다.
                 alert("삭제된 포스트입니다.")
-                console.log("history? ", history)
                 history.push('/')
                 return
             }
-            console.log("Post.js init? ", post)
             this.setState({ post })
         } catch (e) {
             if(e) throw e
@@ -31,7 +29,6 @@ class Post extends Component {
     }
 
     componentDidMount() {
-        console.log("Post.js 마운트")
         if (this.props.loading === false) {
             this.initialize();
         }
@@ -53,7 +50,6 @@ class Post extends Component {
 
         if(!!!post) return null // post가 없으면 보여주지 않음
 
-        // const { title, body, publishedDate, tags } = post.toJS();
         const { title, body, publishedDate, tags } = post;
 
         return (

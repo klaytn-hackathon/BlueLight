@@ -14,9 +14,6 @@ const PostInfo = ({publishedDate, title, tags}) => (
       <div className={cx('tags')}>
         {
           // tags가 존재할 때만 map을 실행한다.
-          // tags && tags.map(
-          //   tag => <Link key={tag} to={`/tag/${tag}`}>#{tag}</Link>
-          // )
           tags && tags.split(',').map(
             tag => tag.trim()
           ).map(
@@ -24,7 +21,6 @@ const PostInfo = ({publishedDate, title, tags}) => (
           )
         }
       </div>
-      {/* <div className={cx('date')}>{moment(publishedDate).format('ll')}</div> */}
       <div className={cx('date')}>{moment.unix(publishedDate).format('ll')}</div>
     </div>
   </div>

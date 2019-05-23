@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as listActions from 'store/modules/list';
 import * as caverActions from 'store/modules/caver';
-// import list from '../../store/modules/list';
 
 class ListContainer extends Component {
     state = {
@@ -22,13 +21,9 @@ class ListContainer extends Component {
     };
 
     cavGetPostList = async () => {
-        console.log("this.state? ", this.state)
-        const { cav, postDB, page, tag } = this.props
-        console.log("cavGetPostList tag? ", tag)
+        const { postDB, page, tag } = this.props
 
         const postLen = await postDB.methods.getPostLen().call()
-        console.log("postLen? ", postLen)
-        console.log("page? ", page)
         if(postLen <= (page-1)*10) {
             return
         }
@@ -52,15 +47,8 @@ class ListContainer extends Component {
                 size++
                 continue
             }
-            console.log("tag 일치하는 Post? ", post)
             posts.push(post)
         }
-        console.log("cavGetPostList posts? ", posts)
-        console.log("posts type? ", typeof posts)
-        console.dir(posts)
-
-        console.log("lastPage? ", Math.ceil(postLen / 10))
-
         this.setState({
             posts,
             lastPage: Math.ceil(postLen / 10) // lastPage 소수점 올림
@@ -68,17 +56,14 @@ class ListContainer extends Component {
     }
 
     componentDidMount() {
-        console.log("ListContainer didmount")
         if (this.props.loading === false) {
             this.cavGetPostList()
         }
     }
 
     componentDidUpdate(prevProps, prevState) {
-        console.log("ListContainer DidUpdate")
         // 로딩이 true -> false로 변경시에만
         if (
-            // this.props.loading === false
             this.props.loading === false &&
             prevProps.loading !== this.props.loading
         ) {
@@ -86,14 +71,11 @@ class ListContainer extends Component {
             this.cavGetPostList()
         }
 
-        // TODO: 나중에 맞게 구현
         // 페이지/태그가 바뀔 때 리스트를 다시 불러온다.
         if (
             prevProps.page !== this.props.page ||
             prevProps.tag !== this.props.tag
         ) {
-            console.log("page나 tag가 바뀜")
-            // this.getPostList();
             this.cavGetPostList()
             // 스크롤바를 맨 위로 올린다.
             document.documentElement.scrollTop = 0;
@@ -101,8 +83,6 @@ class ListContainer extends Component {
     }
 
     render() {
-        // const { loading, posts, page, lastPage, tag } = this.props;
-        // const { loading, page, lastPage, tag } = this.props;
         const { loading, page, tag } = this.props;
         const { posts, lastPage } = this.state
 
@@ -125,11 +105,8 @@ export default connect(
     (state) => ({
         posts: state.list.get('posts'),
         lastPage: state.list.get('lastPage'),
-        cav: state.caver.get('cav'),
         postDB: state.caver.get('postDB'),
-        // loading: state.pender.pending['list/GET_POST_LIST'],
         loading: state.pender.pending['caver/INITIALIZE'],
-        // loading: state.caver.loading,
     }),
     (dispatch) => ({
         ListActions: bindActionCreators(listActions, dispatch),

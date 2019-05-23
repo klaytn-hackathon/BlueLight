@@ -7,7 +7,7 @@ import * as caverActions from 'store/modules/caver';
 
 class Base extends Component {
     initialize = async () => {
-        const { BaseActions, CaverActions } = this.props;
+        const { BaseActions } = this.props;
         if (localStorage.logged === 'true') {
             BaseActions.tempLogin();
         }
@@ -21,15 +21,10 @@ class Base extends Component {
     }
 
     componentDidMount() {
-        console.log("Base mount pbw")
         this.initialize();
         this.caverInitialize()
     }
     
-    componentDidUpdate() {
-        console.log("Base update pbw")
-    }
-
     render() {
         return (
             <div>

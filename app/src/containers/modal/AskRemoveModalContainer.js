@@ -12,7 +12,6 @@ class AskRemoveModalContainer extends Component {
         BaseActions.hideModal('remove');
     }
     handleConfirm = async () => {
-        console.log("삭제 클릭")
         const { BaseActions, PostActions, match, history, postDB, walletInstance, gas } = this.props;
         const { id } = match.params;
 
@@ -25,9 +24,7 @@ class AskRemoveModalContainer extends Component {
                 gas
             })
             .then((receipt) => {
-                console.log("삭제 receipt? ", receipt)
                 BaseActions.hideModal('remove');
-                // TODO: Can't perform a React state update on an unmounted component 에러가 뜨네
                 history.push('/');
             })
         }

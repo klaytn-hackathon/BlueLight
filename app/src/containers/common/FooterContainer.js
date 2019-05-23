@@ -11,7 +11,6 @@ class FooterContainer extends Component {
         if (logged) {
             // logout
             try {
-                // await BaseActions.logout();
                 await CaverActions.logout()
                 window.location.reload(); // 페이지 새로고침
             } catch (e) {
@@ -28,8 +27,6 @@ class FooterContainer extends Component {
     render() {
         const { handleLoginClick } = this;
         const { logged } = this.props;
-        console.log("Footer logged? ", logged)
-        console.log("Footer logged2? ", this.props.logged)
         return <Footer onLoginClick={handleLoginClick} logged={logged} />;
     }
 }

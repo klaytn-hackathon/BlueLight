@@ -11,7 +11,6 @@ class HeaderContainer extends Component {
     };
 
     componentWillUnmount() {
-        console.log("header will unmount")
         this.props.BaseActions.hideModal('remove');
     }
 
