@@ -21,8 +21,7 @@ class RewardsModalContainer extends Component {
         BaseActions.hideModal('rewards');
     }
     handleConfirm = async () => {
-        const { BaseActions, match, history, postDB, walletInstance, gas, cav } = this.props;
-        const { id } = match.params;
+        const { BaseActions, postDB, walletInstance, gas, cav } = this.props;
 
         // 기부하기
         try {
