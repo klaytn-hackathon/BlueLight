@@ -48,6 +48,9 @@ class DonationModalContainer extends Component {
         } finally {
             BaseActions.hideModal('donation')
             BaseActions.hideSpinner()
+            this.setState({
+                donationAmount: 1
+            })
         }
     }
 

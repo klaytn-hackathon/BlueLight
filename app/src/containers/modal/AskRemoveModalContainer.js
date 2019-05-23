@@ -28,6 +28,7 @@ class AskRemoveModalContainer extends Component {
         }
         catch (e) {
             console.error(e);
+            NotificationManager.error("", "Error!")
         } finally {
             BaseActions.hideSpinner()
         }

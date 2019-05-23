@@ -97,8 +97,8 @@ class EditorHeaderContainer extends Component {
             from: walletInstance.address,
             gas,
         })
-        const donationAmount = await postDB.methods.donationAmount().call()
-        NotificationManager.success(`Post 생성\n${donationAmount}Peb가 지급되었습니다.`, "Success")
+        const rewardsAmount = await postDB.methods.rewardsAmount().call()
+        NotificationManager.success(`Post 생성\n${rewardsAmount}Peb가 지급되었습니다.`, "Success")
     }
 
     render() {
