@@ -3,7 +3,6 @@ import PostList from 'components/list/PostList';
 import Pagination from 'components/list/Pagination';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as listActions from 'store/modules/list';
 import * as caverActions from 'store/modules/caver';
 
 class ListContainer extends Component {
@@ -13,12 +12,6 @@ class ListContainer extends Component {
         tag: [],
         lastPage: 0,
     }
-
-    getPostList = () => {
-        // 페이지와 태그 값을 부모에게서 받아 온다.
-        const { tag, page, ListActions } = this.props;
-        ListActions.getPostList({ page, tag });
-    };
 
     cavGetPostList = async () => {
         const { postDB, page, tag } = this.props
@@ -89,9 +82,6 @@ class ListContainer extends Component {
         if (loading) return null; // 로딩중이면 아무것도 보이지 않는다.
         if (loading === undefined) return null
 
-        console.log("posts? ", posts)
-        console.log("this.state!!!", this.state)
-
         return (
             <div>
                 <PostList posts={posts} />
@@ -103,13 +93,10 @@ class ListContainer extends Component {
 
 export default connect(
     (state) => ({
-        posts: state.list.get('posts'),
-        lastPage: state.list.get('lastPage'),
         postDB: state.caver.get('postDB'),
         loading: state.pender.pending['caver/INITIALIZE'],
     }),
     (dispatch) => ({
-        ListActions: bindActionCreators(listActions, dispatch),
         CaverActions: bindActionCreators(caverActions, dispatch),
     })
 )(ListContainer);

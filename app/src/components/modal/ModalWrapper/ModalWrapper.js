@@ -5,6 +5,7 @@ import classNames from 'classnames/bind';
 
 const cx = classNames.bind(styles);
 
+let timerId = null
 
 class ModalWrapper extends Component {
   constructor(props) {
@@ -21,16 +22,23 @@ class ModalWrapper extends Component {
     });
 
     // 250ms 이후 다시 false로 설정
-    setTimeout(() => {
+    timerId = setTimeout(() => {
       this.setState({
         animate: false
       })
+      timerId = null
     }, 250);
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.visible !== this.props.visible) {
       this.startAnimation();
+    }
+  }
+
+  componentWillUnmount() {
+    if(timerId) {
+      clearTimeout(timerId)
     }
   }
 

@@ -3,9 +3,6 @@ import { createAction, handleActions } from 'redux-actions';
 import { Map, fromJS } from 'immutable';
 import { pender } from 'redux-pender';
 import Caver from 'caver-js'
-import axios from 'axios'
-
-import * as api from 'lib/api';
 
 // util variables
 const initCaver = () => {
