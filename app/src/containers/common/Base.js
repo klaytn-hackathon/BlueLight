@@ -22,7 +22,6 @@ class Base extends Component {
     
     render() {
         const { spinner } = this.props
-        console.log("spinner? ", spinner)
         return (
             <div>
                 {/* 전역적으로 사용하는 컴포넌트들이 있다면

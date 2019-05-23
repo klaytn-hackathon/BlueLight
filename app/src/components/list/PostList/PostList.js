@@ -25,7 +25,6 @@ const PostItem = ({title, body, publishedDate, tags, id}) => {
 }
 
 const PostList = ({posts}) => {
-  console.log("PostList posts? ", posts)
   const postList = posts.map(
     (post) => {
       const { _id, title, body, publishedDate, tags } = post;

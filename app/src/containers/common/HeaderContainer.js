@@ -11,8 +11,6 @@ class HeaderContainer extends Component {
     };
 
     rewards = async () => {
-        console.log("onClick rewards")
-        // 모달띄우기
         this.props.BaseActions.showModal('rewards')
     }
 

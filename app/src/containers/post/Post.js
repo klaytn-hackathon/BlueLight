@@ -33,7 +33,6 @@ class Post extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        console.log("Post.js 업데이트")
         // 로딩이 true -> false로 변경시에만
         if (
             this.props.loading === false &&

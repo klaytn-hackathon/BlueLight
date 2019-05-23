@@ -60,7 +60,6 @@ class ListContainer extends Component {
             this.props.loading === false &&
             prevProps.loading !== this.props.loading
         ) {
-            console.log("Cav 로딩 완료")
             this.cavGetPostList()
         }
 
