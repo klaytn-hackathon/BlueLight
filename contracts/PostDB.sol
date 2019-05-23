@@ -17,7 +17,7 @@ contract PostDB is Blacklist {
     
     // mapping(uint256 => post) public posts;
     Post[] public posts;
-    uint256 rewardsAmount;
+    uint256 public rewardsAmount;
 
     constructor() public {
         superOwner = msg.sender;

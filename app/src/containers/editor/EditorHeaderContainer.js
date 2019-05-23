@@ -4,10 +4,12 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import queryString from 'query-string';
+import { NotificationManager } from 'react-notifications'
 
 import * as baseActions from 'store/modules/base';
 import * as editorActions from 'store/modules/editor';
 import * as caverActions from 'store/modules/caver';
+
 
 class EditorHeaderContainer extends Component {
     async componentDidMount() {
@@ -56,13 +58,14 @@ class EditorHeaderContainer extends Component {
         };
 
         try {
+            BaseActions.showSpinner()
             // id가 존재하면 editPost 호출
             const { id } = queryString.parse(location.search);
             if (id) {
-                BaseActions.showSpinner()
                 await this.modifyPost(id, post)
                 .then((receipt) => {
                     history.push(`/post/${id}`);
+                    NotificationManager.success("Post 수정", "Success")
                 })
                 return;
             }
@@ -70,6 +73,7 @@ class EditorHeaderContainer extends Component {
             await this.addPost(post)
             history.push('/')
         } catch (e) {
+            NotificationManager.error("", "Error!")
             if(e) throw e
         }
         finally {
@@ -89,18 +93,12 @@ class EditorHeaderContainer extends Component {
     addPost = async (post) => {
         const { postDB, walletInstance, gas, BaseActions } = this.props
         const {title, body, tags} = post
-        try {
-            BaseActions.showSpinner()
-            await postDB.methods.addPost(title, body, tags).send({
-                from: walletInstance.address,
-                gas,
-            })
-        } catch(err) {
-            if(err) throw err
-        } finally {
-            BaseActions.hideSpinner()
-        }
-        
+        await postDB.methods.addPost(title, body, tags).send({
+            from: walletInstance.address,
+            gas,
+        })
+        const rewardsAmount = await postDB.methods.rewardsAmount().call()
+        NotificationManager.success(`Post 생성\n${rewardsAmount}Peb가 지급되었습니다.`, "Success")
     }
 
     render() {

@@ -6,8 +6,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as baseActions from 'store/modules/base';
 import * as caverActions from 'store/modules/caver';
-// import Loader from 'react-loader-spinner'
-// import { RotateSpinner } from 'react-spinners-kit'
+import { NotificationContainer } from 'react-notifications'
+import 'react-notifications/lib/notifications.css';
+
 
 class Base extends Component {
     caverInitialize = async () => {
@@ -29,6 +30,7 @@ class Base extends Component {
                 <LoginModalContainer />
                 <RewardsModalContainer />
                 <Spinner spinner={spinner} />
+                <NotificationContainer />
             </div>
         );
     }

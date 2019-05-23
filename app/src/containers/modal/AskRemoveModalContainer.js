@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import * as baseActions from 'store/modules/base';
 import AskRemoveModal from 'components/modal/AskRemoveModal';
 import { withRouter } from 'react-router-dom';
+import { NotificationManager } from 'react-notifications'
 
 class AskRemoveModalContainer extends Component {
     handleCancel = () => {
@@ -22,6 +23,7 @@ class AskRemoveModalContainer extends Component {
                 gas
             })
             await BaseActions.hideModal('remove');
+            NotificationManager.success("Post 삭제", "Success")
             history.push('/');
         }
         catch (e) {

@@ -4,7 +4,7 @@ import './OwnerShip.sol';
 
 contract Blacklist is OwnerShip {
 
-    mapping(address => bool) blacklist;
+    mapping(address => bool) public blacklist;
 
     event AddBlacklist(address _node);
     event DeleteBlacklist(address _node);

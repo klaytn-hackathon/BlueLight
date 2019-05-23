@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom'
 import removeMd from 'remove-markdown';
 import { Helmet } from 'react-helmet';
+import { NotificationManager } from 'react-notifications'
 
 class Post extends Component {
     state = {
@@ -16,7 +17,7 @@ class Post extends Component {
             const post = await postDB.methods.posts(id).call()
             if(post.removed) {
                 // 삭제된 포스트는 출력하지 않는다.
-                alert("삭제된 포스트입니다.")
+                NotificationManager.warning("열람 불가", "삭제된 포스트입니다.")
                 history.push('/')
                 return
             }

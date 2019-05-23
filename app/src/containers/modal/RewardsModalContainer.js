@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import * as baseActions from 'store/modules/base';
 import RewardsModal from 'components/modal/RewardsModal';
 import { withRouter } from 'react-router-dom';
+import { NotificationManager } from 'react-notifications'
 
 class RewardsModalContainer extends Component {
     state = {
@@ -31,6 +32,8 @@ class RewardsModalContainer extends Component {
                 gas,
                 value: cav.utils.toPeb(this.state.rewardsAmount, 'KLAY'),
             })
+            NotificationManager.success(`${this.state.rewardsAmount}KLAY를 기부하였습니다.`,
+                "감사합니다!")
         } catch(err) {
             if(err) throw err
         } finally {
