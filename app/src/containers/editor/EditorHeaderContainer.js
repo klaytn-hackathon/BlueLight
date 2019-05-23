@@ -47,7 +47,7 @@ class EditorHeaderContainer extends Component {
     }
 
     handleSubmit = async () => {
-        const { title, markdown, tags, EditorActions, history, location } = this.props;
+        const { title, markdown, tags, history, location } = this.props;
         const post = {
             title,
             body: markdown,
@@ -58,7 +58,6 @@ class EditorHeaderContainer extends Component {
             // id가 존재하면 editPost 호출
             const { id } = queryString.parse(location.search);
             if (id) {
-                // await EditorActions.editPost({ id, ...post });
                 await this.modifyPost(id, post)
                 .then((receipt) => {
                     history.push(`/post/${id}`);

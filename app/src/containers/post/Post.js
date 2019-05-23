@@ -3,10 +3,8 @@ import PostInfo from 'components/post/PostInfo';
 import PostBody from 'components/post/PostBody';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom'
-import { bindActionCreators } from 'redux';
 import removeMd from 'remove-markdown';
 import { Helmet } from 'react-helmet';
-// import * as caverActions from 'store/modules/caver';
 
 class Post extends Component {
     state = {
@@ -75,6 +73,5 @@ export default connect(
         loading: state.pender.pending['caver/INITIALIZE'],
     }),
     (dispatch) => ({
-        // CaverActions: bindActionCreators(caverActions, dispatch),
     })
 )(withRouter(Post));

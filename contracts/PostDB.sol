@@ -1,40 +1,8 @@
 pragma solidity 0.4.24;
 
-// TODO: 파일 분리하기
-contract OwnerShip {
-    address public superOwner;
-    mapping(address => bool) public owners;
+import "./Blacklist.sol";
 
-    event ChangeSuperOwner(address _superOwner);
-    event AddOwner(address _owner);
-    event DeleteOwner(address _owner);
-
-    modifier onlySuperOwner() {
-        require(msg.sender == superOwner, "onlySuperOwner");
-        _;
-    }
-    modifier onlyOwner() {
-        require(owners[msg.sender], "onlyOwner");
-        _;
-    }
-
-    function changeSuperOwner(address _superOwner) public onlySuperOwner {
-        superOwner = _superOwner;
-        emit ChangeSuperOwner(_superOwner);
-    }
-    function addOwner(address _owner) public onlySuperOwner {
-        require(!owners[_owner], "_owner is already owner");
-        owners[_owner] = true;
-        emit AddOwner(_owner);
-    }
-    function removeOwner(address _owner) public onlySuperOwner {
-        require(owners[_owner], "_owner is not owner");
-        owners[_owner] = false;
-        emit DeleteOwner(_owner);
-    }
-}
-
-contract PostDB is OwnerShip {
+contract PostDB is Blacklist {
 
     struct Post {
         uint256 _id; // post의 id
@@ -49,10 +17,15 @@ contract PostDB is OwnerShip {
     
     // mapping(uint256 => post) public posts;
     Post[] public posts;
+    uint256 rewardsAmount;
 
     constructor() public {
         superOwner = msg.sender;
+        emit ChangeSuperOwner(msg.sender);
         owners[msg.sender] = true;
+        emit AddOwner(msg.sender);
+        rewardsAmount = 1000000000000000000 * 0.01; // 0.01 KLAY
+        emit ChangeRewardsAmount(rewardsAmount);
     }
 
     modifier onlyAuthorOrOwner(uint256 postId) {
@@ -73,15 +46,16 @@ contract PostDB is OwnerShip {
     event ModifyPost(uint256 indexed postId, address indexed author, string indexed title, string body, string tags, uint256 modifiedDate);
     event DisablePost(uint256 postId);
     event EnablePost(uint256 postId);
+    event Rewards(address who, uint256 amount);
+    event ChangeRewardsAmount(uint256 amount);
     
-    // TODO: 포스트 수정기능 구현필요
     /**
         @dev 포스트 생성
         @param title 타이틀
         @param body 바디
         @param tags 태그
     */
-    function addPost(string memory title, string memory body, string memory tags) public returns(bool) {
+    function addPost(string memory title, string memory body, string memory tags) public whoPermitted returns(bool) {
         uint256 postId = posts.length;
         address author = msg.sender;
         uint256 publishedDate = now;
@@ -97,6 +71,7 @@ contract PostDB is OwnerShip {
             removed
         ));
         emit AddPost(postId, author, title, body, tags, publishedDate);
+        rewards();
         return true;
     }
 
@@ -108,7 +83,7 @@ contract PostDB is OwnerShip {
         @param tags 수정된 tags
     */
     function modifyPost(uint256 postId, string memory title, string memory body, string memory tags)
-    public onlyActivePost(postId) onlyAuthorOrOwner(postId) 
+    public onlyActivePost(postId) onlyAuthorOrOwner(postId) whoPermitted
     returns(bool) {
         address author = posts[postId].author;
         uint256 publishedDate = posts[postId].publishedDate;
@@ -138,7 +113,27 @@ contract PostDB is OwnerShip {
         return true;
     }
 
+    function deposit() public payable {}
+
+    function rewards() internal returns(bool) {
+        require(getBalance() >= rewardsAmount, "lack KLAY");
+
+        msg.sender.transfer(rewardsAmount);
+        emit Rewards(msg.sender, rewardsAmount);
+        return true;
+    }
+
+    function changeRewardsAmound(uint256 amount) public onlySuperOwner returns(bool) {
+        rewardsAmount = amount;
+
+        emit ChangeRewardsAmount(amount);
+        return true;
+    }
+
     function getPostLen() public view returns(uint256) {
         return posts.length;
+    }
+    function getBalance() public view returns(uint256) {
+        return address(this).balance;
     }
 }
