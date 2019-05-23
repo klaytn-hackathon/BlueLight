@@ -30,6 +30,7 @@ const LOGOUT = 'caver/LOGOUT';
 const CHECK_LOGIN = 'caver/CHECK_LOGIN';
 const SET_MESSAGE = 'caver/SET_MESSAGE';
 const GET_POST = 'caver/GET_POST';
+const REWARDS = 'caver/REWARDS';
 const TEST = 'caver/TEST';
 
 // action creators
@@ -40,6 +41,7 @@ export const logout = createAction(LOGOUT);
 export const checkLogin = createAction(CHECK_LOGIN);
 export const setMessage = createAction(SET_MESSAGE);
 export const getPost = createAction(GET_POST);
+export const rewards = createAction(REWARDS);
 export const test = createAction(TEST);
 
 // initial state
@@ -140,4 +142,8 @@ export default handleActions({
         console.log("[GET_POST] state? ", state)
         return state
     },
+    [REWARDS]: (state, action) => {
+        
+        return state;
+    }
 }, initialState)

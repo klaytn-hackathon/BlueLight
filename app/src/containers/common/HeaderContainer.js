@@ -10,17 +10,23 @@ class HeaderContainer extends Component {
         this.props.BaseActions.showModal('remove');
     };
 
+    rewards = async () => {
+        console.log("onClick rewards")
+        // 모달띄우기
+        this.props.BaseActions.showModal('rewards')
+    }
+
     componentWillUnmount() {
         this.props.BaseActions.hideModal('remove');
     }
 
     render() {
-        const { handleRemove } = this;
+        const { handleRemove, rewards } = this;
         const { match, logged } = this.props;
 
         const { id } = match.params;
 
-        return <Header postId={id} logged={logged} onRemove={handleRemove} />;
+        return <Header postId={id} logged={logged} onRemove={handleRemove} rewards={rewards} />;
     }
 }
 

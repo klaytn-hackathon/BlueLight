@@ -22,6 +22,7 @@ const initialState = Map({
     modal: Map({
         remove: false,
         login: false,
+        rewards: false,
     }),
     loginModal: Map({
         password: '',
@@ -34,6 +35,7 @@ const initialState = Map({
 export default handleActions(
     {
         [SHOW_MODAL]: (state, action) => {
+            console.log("showModal")
             const { payload: modalName } = action;
             return state.setIn(['modal', modalName], true);
         },
