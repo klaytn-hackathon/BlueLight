@@ -26,6 +26,7 @@ class RewardsModalContainer extends Component {
 
         // 기부하기
         try {
+            BaseActions.showSpinner()
             await postDB.methods.deposit().send({
                 from: walletInstance.address,
                 gas,
@@ -35,6 +36,7 @@ class RewardsModalContainer extends Component {
             if(err) throw err
         } finally {
             BaseActions.hideModal('rewards')
+            BaseActions.hideSpinner()
         }
     }
 

@@ -16,7 +16,7 @@ class AskRemoveModalContainer extends Component {
 
         // 포스트 삭제 후 모달을 닫고 메인 페이지로 이동
         try {
-            // TODO: remove로 변경
+            BaseActions.showSpinner()
             await postDB.methods.removePost(id).send({
                 from: walletInstance.address,
                 gas
@@ -26,6 +26,8 @@ class AskRemoveModalContainer extends Component {
         }
         catch (e) {
             console.error(e);
+        } finally {
+            BaseActions.hideSpinner()
         }
     }
 

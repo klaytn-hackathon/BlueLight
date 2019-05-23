@@ -7,6 +7,7 @@ import {
     NotFoundPage
 } from 'pages';
 import Base from 'containers/common/Base';
+import Loader from 'react-loader-spinner'
 
 const App = () => {
     return (

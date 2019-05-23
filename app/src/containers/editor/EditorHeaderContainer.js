@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import queryString from 'query-string';
 
+import * as baseActions from 'store/modules/base';
 import * as editorActions from 'store/modules/editor';
 import * as caverActions from 'store/modules/caver';
 
@@ -47,7 +48,7 @@ class EditorHeaderContainer extends Component {
     }
 
     handleSubmit = async () => {
-        const { title, markdown, tags, history, location } = this.props;
+        const { title, markdown, tags, history, location, BaseActions } = this.props;
         const post = {
             title,
             body: markdown,
@@ -58,6 +59,7 @@ class EditorHeaderContainer extends Component {
             // id가 존재하면 editPost 호출
             const { id } = queryString.parse(location.search);
             if (id) {
+                BaseActions.showSpinner()
                 await this.modifyPost(id, post)
                 .then((receipt) => {
                     history.push(`/post/${id}`);
@@ -69,6 +71,9 @@ class EditorHeaderContainer extends Component {
             history.push('/')
         } catch (e) {
             if(e) throw e
+        }
+        finally {
+            BaseActions.hideSpinner()
         }
     }
 
@@ -82,12 +87,20 @@ class EditorHeaderContainer extends Component {
     }
 
     addPost = async (post) => {
-        const { postDB, walletInstance, gas } = this.props
+        const { postDB, walletInstance, gas, BaseActions } = this.props
         const {title, body, tags} = post
-        await postDB.methods.addPost(title, body, tags).send({
-            from: walletInstance.address,
-            gas,
-        })
+        try {
+            BaseActions.showSpinner()
+            await postDB.methods.addPost(title, body, tags).send({
+                from: walletInstance.address,
+                gas,
+            })
+        } catch(err) {
+            if(err) throw err
+        } finally {
+            BaseActions.hideSpinner()
+        }
+        
     }
 
     render() {
@@ -116,6 +129,7 @@ export default connect(
         gas: state.caver.get('gas'),
     }),
     (dispatch) => ({
+        BaseActions: bindActionCreators(baseActions, dispatch),
         EditorActions: bindActionCreators(editorActions, dispatch),
         CaverActions: bindActionCreators(caverActions, dispatch),
     })
