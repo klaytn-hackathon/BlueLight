@@ -91,14 +91,14 @@ class EditorHeaderContainer extends Component {
     }
 
     addPost = async (post) => {
-        const { postDB, walletInstance, gas, BaseActions } = this.props
+        const { postDB, walletInstance, gas } = this.props
         const {title, body, tags} = post
         await postDB.methods.addPost(title, body, tags).send({
             from: walletInstance.address,
             gas,
         })
-        const rewardsAmount = await postDB.methods.rewardsAmount().call()
-        NotificationManager.success(`Post 생성\n${rewardsAmount}Peb가 지급되었습니다.`, "Success")
+        const donationAmount = await postDB.methods.donationAmount().call()
+        NotificationManager.success(`Post 생성\n${donationAmount}Peb가 지급되었습니다.`, "Success")
     }
 
     render() {

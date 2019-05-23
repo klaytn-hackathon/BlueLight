@@ -2,30 +2,36 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as baseActions from 'store/modules/base';
-import RewardsModal from 'components/modal/RewardsModal';
+import DonationModal from 'components/modal/DonationModal';
 import { withRouter } from 'react-router-dom';
 import { NotificationManager } from 'react-notifications'
 
-class RewardsModalContainer extends Component {
+class DonationModalContainer extends Component {
     state = {
-        rewardsAmount: 1,
+        donationAmount: 1,
     }
 
     onChangeInput = (e) => {
         this.setState({
-            rewardsAmount: e.target.value,
+            donationAmount: e.target.value,
         })
     }
 
     handleCancel = () => {
         const { BaseActions } = this.props;
-        BaseActions.hideModal('rewards');
+        BaseActions.hideModal('donation');
         this.setState({
-            rewardsAmount: 1
+            donationAmount: 1
         })
     }
     handleConfirm = async () => {
         const { BaseActions, postDB, walletInstance, gas, cav } = this.props;
+        const { donationAmount } = this.state
+        if(donationAmount <= 0) {
+            NotificationManager.warning("0KLAY 이하는 기부할 수 없습니다.",
+                "Warning")
+            return
+        }
 
         // 기부하기
         try {
@@ -33,33 +39,33 @@ class RewardsModalContainer extends Component {
             await postDB.methods.deposit().send({
                 from: walletInstance.address,
                 gas,
-                value: cav.utils.toPeb(this.state.rewardsAmount, 'KLAY'),
+                value: cav.utils.toPeb(donationAmount, 'KLAY'),
             })
-            NotificationManager.success(`${this.state.rewardsAmount}KLAY를 기부하였습니다.`,
+            NotificationManager.success(`${donationAmount}KLAY를 기부하였습니다.`,
                 "감사합니다!")
         } catch(err) {
             if(err) throw err
         } finally {
-            BaseActions.hideModal('rewards')
+            BaseActions.hideModal('donation')
             BaseActions.hideSpinner()
         }
     }
 
     componentWillUnmount() {
-        this.props.BaseActions.hideModal('rewards')
+        this.props.BaseActions.hideModal('donation')
     }
 
     render() {
         const { visible } = this.props;
         const { handleCancel, handleConfirm, onChangeInput } = this;
-        const { rewardsAmount } = this.state
+        const { donationAmount } = this.state
 
         return (
-            <RewardsModal
+            <DonationModal
                 visible={visible}
                 onCancel={handleCancel}
                 onConfirm={handleConfirm}
-                rewardsAmount={rewardsAmount}
+                donationAmount={donationAmount}
                 onChangeInput={onChangeInput}
             />
         );
@@ -68,7 +74,7 @@ class RewardsModalContainer extends Component {
 
 export default connect(
     (state) => ({
-        visible: state.base.getIn(['modal', 'rewards']),
+        visible: state.base.getIn(['modal', 'donation']),
         postDB: state.caver.get('postDB'),
         walletInstance: state.caver.get('walletInstance'),
         gas: state.caver.get('gas'),
@@ -77,4 +83,4 @@ export default connect(
     (dispatch) => ({
         BaseActions: bindActionCreators(baseActions, dispatch),
     })
-)(withRouter(RewardsModalContainer));
+)(withRouter(DonationModalContainer));

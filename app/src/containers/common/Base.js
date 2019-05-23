@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import LoginModalContainer from 'containers/modal/LoginModalContainer';
-import RewardsModalContainer from 'containers/modal/RewardsModalContainer';
+import DonationModalContainer from 'containers/modal/DonationModalContainer';
 import Spinner from 'components/common/Spinner'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -28,7 +28,7 @@ class Base extends Component {
                 {/* 전역적으로 사용하는 컴포넌트들이 있다면
                     여기에서 렌더링 한다. */}
                 <LoginModalContainer />
-                <RewardsModalContainer />
+                <DonationModalContainer />
                 <Spinner spinner={spinner} />
                 <NotificationContainer />
             </div>

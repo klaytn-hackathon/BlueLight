@@ -6,7 +6,7 @@ import Button from 'components/common/Button';
 
 const cx = classNames.bind(styles);
 
-const Header = ({ postId, onRemove, logged, rewards }) => (
+const Header = ({ postId, onRemove, logged, donation }) => (
     <header className={cx('header')}>
         <div className={cx('header-content')}>
             <div className={cx('brand')}>
@@ -21,7 +21,7 @@ const Header = ({ postId, onRemove, logged, rewards }) => (
                         <Button key="remove" theme="outline" onClick={onRemove}>삭제</Button>
                     ]
                 }
-                <Button theme="outline" onClick={rewards}>기부하기</Button>
+                <Button theme="outline" onClick={donation}>기부하기</Button>
                 <Button theme="outline" to="/editor">새 포스트</Button>
             </div>}
         </div>

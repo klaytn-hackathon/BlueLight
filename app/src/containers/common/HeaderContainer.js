@@ -10,8 +10,8 @@ class HeaderContainer extends Component {
         this.props.BaseActions.showModal('remove');
     };
 
-    rewards = async () => {
-        this.props.BaseActions.showModal('rewards')
+    donation = async () => {
+        this.props.BaseActions.showModal('donation')
     }
 
     componentWillUnmount() {
@@ -19,12 +19,12 @@ class HeaderContainer extends Component {
     }
 
     render() {
-        const { handleRemove, rewards } = this;
+        const { handleRemove, donation } = this;
         const { match, logged } = this.props;
 
         const { id } = match.params;
 
-        return <Header postId={id} logged={logged} onRemove={handleRemove} rewards={rewards} />;
+        return <Header postId={id} logged={logged} onRemove={handleRemove} donation={donation} />;
     }
 }
 

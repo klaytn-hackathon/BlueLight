@@ -28,7 +28,7 @@ const initialState = Map({
     modal: Map({
         remove: false,
         login: false,
-        rewards: false,
+        donation: false,
     }),
     loginModal: Map({
         password: '',
