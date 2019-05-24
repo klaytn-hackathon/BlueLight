@@ -21,7 +21,6 @@
   },
   "homepage": "https://github.com/truffle-box/drizzle-box#readme",
   "dependencies": {
-    "connect-privkey-to-provider": "0.0.3",
-    "openzeppelin-solidity": "^2.2.0"
+    "connect-privkey-to-provider": "0.0.3"
   }
 }
