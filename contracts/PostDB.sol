@@ -46,6 +46,7 @@ contract PostDB is Blacklist {
     event ModifyPost(uint256 indexed postId, address indexed author, string indexed title, string body, string tags, uint256 modifiedDate);
     event DisablePost(uint256 postId);
     event EnablePost(uint256 postId);
+    event Deposit(uint256 amount);
     event Rewards(address who, uint256 amount);
     event ChangeRewardsAmount(uint256 amount);
     
@@ -113,7 +114,9 @@ contract PostDB is Blacklist {
         return true;
     }
 
-    function deposit() public payable {}
+    function deposit() public payable {
+        emit Deposit(msg.value);
+    }
 
     function rewards() internal returns(bool) {
         require(getBalance() >= rewardsAmount, "lack KLAY");
